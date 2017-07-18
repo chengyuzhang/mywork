@@ -1,120 +1,111 @@
 
-/*选项栏内容*/
-.tab1-nav-con{
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0rem;
-	width: 100%;
-	background-color: #f0f0f0;
+body{
+	background:#fff;
 }
-
-/*************************************第四页(购物车内容页)**********************************/
-.cart{
-	background-color: #f0f0f0;
+.body-wrap{
+	margin-bottom: 80px;
 }
-.cart>.cart-title{
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: .54rem;
-	line-height: .54rem;
-	text-align: center;
-	background: #fff;
-	border-bottom: 1px solid #f0f0f0;
+.wrap-cart{
+	width:960px;
+	margin:0 auto 0px;
 }
-.cart>.cart-title>a{
+//全选
+.wrap-cart .cart-pay{
+	height:44px;
+	margin-top:20px;
+	border:1px solid #ddd;
+	padding:15px 16px 15px 14px;
+}
+.wrap-cart>.cart-pay .pay-price{
 	float: left;
-	margin: .07rem .1rem;
-	width: .4rem;
-	height: .4rem;
-	background: url(../imgs/icon-left.png) no-repeat;
-	background-size: contain;
 }
-.cart>.cart-title span{
-	font-size: .2rem;
-	color: #222;
-}
-.cart>.cart-title span>em{
-	font-size: .2rem;
-	color: #CB68A4;
-}
-.cart>.cart-title i{
-	float: right;
-	margin-top: .07rem;
-	margin-right: .15rem;
-	width: .4rem;
-	height: .4rem;
-	background: url(../imgs/server-icon1.png) no-repeat;
-	background-size: contain;
-}
-
-.cart>.cart-list{
-	position: absolute;
-	left: 0;
-	top: .54rem;
-	bottom: .54rem;
-	width: 100%;
-	overflow-y: auto;
-}
-.cart>.cart-list>ul{
-	padding-bottom: .2rem;
-}
-.cart>.cart-list li.cart-item{
-	margin-top: .15rem;
-	background-color: #fff;
-	overflow: hidden;
-}
-.cart li.cart-item>.cart-item-detail{
-	overflow: hidden;
-}
-.cart>.cart-list .cart-item-l{
+.wrap-cart>.cart-pay .pay-price>*{
 	float: left;
-	width: 1.35rem;
 }
-.cart>.cart-list .cart-item-l>span{
+.wrap-cart>.cart-pay .pay-price span{
 	float: left;
-	margin-left: .1rem;
-	margin-top: .55rem;
-	width: .15rem;
-	height: .15rem;
+	width: 24px;
+	height: 24px;
 	background: url(../imgs/space.png) no-repeat;
 	background-size: contain;
+	margin-top:-5px;
 }
-.cart>.cart-list .cart-item-l>span.active{
+.wrap-cart>.cart-pay .pay-price span.active{
 	background: url(../imgs/space-ok.png) no-repeat;
 	background-size: contain;
 }
-.cart>.cart-list .cart-item-l>span.grey{
+.wrap-cart>.cart-pay .pay-price i{
+	margin-left: 18px;
+	font-size: 14px;
+	color: #333;
+}
+.wrap-cart>.cart-pay .pay-money{
+	position: relative;
+	float:right;
+}
+.wrap-cart>.cart-pay .pay-money a{
+	position: absolute;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+// 　购物车列表
+.wrap-cart>.cart-list li.cart-item{
+	margin-top:15px;
+	border:1px solid #ddd;
+	margin-top:20px;
+	padding:15px 16px 15px 14px;
+}
+.wrap-cart li.cart-item>.cart-item-detail{
+	overflow: hidden;
+}
+.wrap-cart>.cart-list .cart-item-l{
+	float: left;
+	width: 132px;
+}
+.wrap-cart>.cart-list .cart-item-l>span{
+	float: left;
+	margin-top: 28px;
+	width: 24px;
+	height: 24px;
+	background: url(../imgs/space-no1.png) no-repeat;
+	background-size: contain;
+}
+.wrap-cart>.cart-list .cart-item-l>span.active{
+	background: url(../imgs/space-ok.png) no-repeat;
+	background-size: contain;
+}
+.wrap-cart>.cart-list .cart-item-l>span.grey{
 	background: none;
 	background-color: #eee;
 	border-radius: 50%;
 	overflow: hidden;
 }
-.cart>.cart-list .cart-item-l>.goods-pic{
-	float: right;
+.wrap-cart>.cart-list .cart-item-l>.goods-pic{
 	position: relative;
-	margin-top: .15rem;
-	width: 1rem;
-	height: 1rem;
+	float:left;
+	width: 90px;
+	height: 90px;
 	border-radius: 5px;
+	border:1px solid #ddd;
+	margin-left:18px;
 	overflow: hidden;
 }
-.cart>.cart-list .cart-item-l>.goods-pic>a{
+.wrap-cart>.cart-list .cart-item-l>.goods-pic>a{
 	position: absolute;
 	left: 0;
 	top: 0;
 	width: 100%;
 	height: 100%;
 }
-.cart>.cart-list .cart-item-l>.goods-pic img{
+.wrap-cart>.cart-list .cart-item-l>.goods-pic img{
 	width: 100%;
 	height: 100%;
 	opacity: 0;
-	transition: all 1s;
+	transition: all .5s;
 }
-.cart>.cart-list .cart-item-l>.goods-pic span{
+.wrap-cart>.cart-list .cart-item-l>.goods-pic span{
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -124,178 +115,175 @@
 	background-size: contain;
 }
 
-.cart>.cart-list .cart-item-r{
-	float: right;
-	position: relative;
-	margin-top: .1rem;
-	width: 2.25rem;
-	height: 1.05rem;
-}
-.cart>.cart-list .cart-item-r>h3{
-	margin-top: .05rem;
-	width: 100%;
-	line-height: .18rem;
-	word-wrap: break-word;
-}
-.cart>.cart-list .cart-item-r>h3>a{
-	font-size: .14rem;
-	color: #222;
-}
-.cart>.cart-list .cart-item-r>p,.cart>.cart-list .cart-item-r>p em{
-	font-size: .14rem;
-	color: #666;
-}
-.cart>.cart-list .cart-item-r>p{
-	position: absolute;
-	top: .44rem;
-	left: 0;
-	bottom: .48rem;
-	width: 100%;
-}
-.cart>.cart-list .cart-item-r>p em{
-	line-height: .18rem;
-}
-.cart>.cart-list .goods-price{
-	position: absolute;
-	width: 100%;
-	left: 0;
-	bottom: 0;
-	overflow: hidden;
-}
-.cart>.cart-list .goods-price>span{
+.wrap-cart .cart-list .cart-item-r{
 	float: left;
-	font-size: .18rem;
-	color: #E3458D;
 }
-.cart>.cart-list .goods-price .goods-count{
+.wrap-cart>.cart-list .cart-item-r>h3{
+	width:234px;
+	float:left;
+	line-height:24px;
+	margin-left:20px;
+}
+.wrap-cart>.cart-list .cart-item-r>h3 p{
+	color:#FE556B;
+	font-size:14px;
+}
+.wrap-cart>.cart-list .cart-item-r>h3>a{
+	display:inline-block;
+	height:64px;
+	font-size:14px;
+	color: #4A4A4A;
+}
+.wrap-cart>.cart-list .cart-item-r>p{
+	font-size:14px;
+	color: #4A4A4A;
+	line-height:24px;
+	margin-left:50px;
+}
+.wrap-cart .cart-list .goods-material{
+	float:left;
+	width:180px;
+	height: 25px;
+}
+.wrap-cart>.cart-list .cart-item-r>p em{
+	font-size:14px;
+	color: #4A4A4A;
+}
+.wrap-cart .cart-list .goods-price{
+	float:left;
+	width: 256px;
+}
+.wrap-cart>.cart-list .goods-price>span{
+	float: left;
+	font-size: 16px;
+	color: #E3458D;
+	margin-left:50px;
+	display:inline-block;
+	line-height:20px;
+}
+.wrap-cart>.cart-list .goods-price .goods-count{
 	float: right;
-	margin-right: .17rem;
-	height: .24rem;
+	margin-right: 16px;
+	height: 24px;
 	border: 1px solid #999;
 	border-radius: 4px;
+	margin-left:50px;
 }
-.cart>.cart-list .goods-price .goods-count>span{
+.wrap-cart>.cart-list .goods-price .goods-count>span{
 	float: left;
-	width: .2rem;
+	width: 20px;
 	height: 100%;
-	line-height: .2rem;
+	line-height: 20px;
 	color: #999;
 	text-align: center;
 }
-.cart>.cart-list .goods-price .goods-count>span.add{}
-.cart>.cart-list .goods-price .goods-count>span.remain{
+.wrap-cart>.cart-list .goods-price .goods-count>span.add{}
+.wrap-cart>.cart-list .goods-price .goods-count>span.remain{
 	float: right;
 }
-.cart>.cart-list .goods-price .goods-count>input{
+.wrap-cart>.cart-list .goods-price .goods-count>input{
 	float: left;
-	width: .3rem;
+	width: 30px;
 	height: 100%;
-	line-height: .2rem;
+	line-height: 20px;
 	color: #222;
 	text-align: center;
 	border-left: 1px solid #999;
 	border-right: 1px solid #999;
 }
-.cart .cart-item-remove{
-	width: 100%;
-	margin-top: .1rem;
-	margin-bottom: .1rem;
-	overflow: hidden;
+.wrap-cart .cart-item-r .cart-item-remove{
+	width: 30px;
+	line-height:24px;
+	float:right;
 }
-.cart .cart-item-remove>span{
+.wrap-cart .cart-item-r span{
 	margin-left: .35rem;
 	color: #FE556B;
 }
-.cart .cart-item-remove>i{
-	float: right;
-	margin-right: .05rem;
+.wrap-cart .cart-item-r i{
+	float:left;
+	margin-right: 5px;
 	width: 1px;
-	height: .12rem;
+	height: 12px;
 	background-color: #999;
+	margin-top:6px;
 }
-.cart .cart-item-remove>em{
+.wrap-cart .cart-item-r ƒ√em{
 	float: right;
 	margin-right: .17rem;
 	color: #666;
 }
 
-.cart>.cart-pay{
+// 全选和结算
+.selectall{
 	position: absolute;
 	left: 0;
 	bottom: 0;
 	width: 100%;
-	height: .58rem;
-	line-height: .58rem;
+	height: 80px;
+	line-height: 80px;
 	background-color: #fff;
 	overflow: hidden;
+	box-shadow:0 2px 12px 0 #000;
 }
-.cart>.cart-pay .pay-price{
+.account{
+	width:960px;
+	margin:auto;
+}
+.account> .pay-price{
 	float: left;
-	width: 2.55rem;
 }
-.cart>.cart-pay .pay-price>*{
+.account>.pay-price>*{
 	float: left;
 }
-.cart>.cart-pay .pay-price span{
-	margin: .22rem .15rem 0 .1rem;
-	width: .15rem;
-	height: .15rem;
-	background: url(../imgs/space.png) no-repeat;
+.account> .pay-price span{
+	margin: 28px;
+	width: 24px;
+	height: 24rem;
+	background: url(../imgs/space-no1.png) no-repeat;
 	background-size: contain;
 }
-.cart>.cart-pay .pay-price span.active{
+.account>.pay-price span.active{
 	background: url(../imgs/space-ok.png) no-repeat;
 	background-size: contain;
 }
-.cart>.cart-pay .pay-price i{
-	margin-right: .15rem;
-	font-size: .14rem;
+.account>.pay-price em{
+	font-size:14px;
 	color: #333;
+	padding-left:15px;
 }
-.cart>.cart-pay .pay-price em{
+.account>.pay-price em i{
 	font-size: .18rem;
 	color: #E3458D;
 }
-.cart>.cart-pay .pay-money{
+.account> .pay-money{
 	position: relative;
 	float: right;
-	width: 1.2rem;
-	text-align: center;
+}
+.account> .pay-money span{
+	font-size:25px;
+	color:#CB68A4;
+	padding-right:35px;
+}
+.account .pay-money .account-btn{
+	width:143px;
+	height:50px;
+	line-height:50px;
+	text-align:center;
 	background-color: #F5A5C7;
+	margin-top:15px;
+	color:#fff;
+	font-size:20px;
 }
-.cart>.cart-pay .pay-money span{
-	color: #fff;
-	font-size: .2rem;
-}
-.cart>.cart-pay .pay-money i{
-	color: #fff;
-	font-size: .14rem;
-}
-.cart>.cart-pay .pay-money a{
+.account> .pay-money a{
 	position: absolute;
 	left: 0;
 	width: 100%;
 	height: 100%;
 }
 
-/*库存提示*/
-.count-tips{
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	margin-left: -1.58rem;
-	margin-top: -.29rem;
-	width: 3.16rem;
-	height: .58rem;
-	line-height: .58rem;
-	text-align: center;
-	font-size: .18rem;
-	background-color: rgba(0,0,0,.6);
-	z-index: 1;
-	border-radius: 8px;
-	transition: all .5s;
-	display: none;
-	opacity: 0;
+.footer{
+	position: static;
 }
 
 //删除提示
@@ -315,27 +303,27 @@
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	margin-top: -1.5rem;
-	margin-left: -1.35rem;
+	margin-top: -150px;
+	margin-left: -135px;
 	background-color: rgba(255,255,255,.95);
 	border-radius: 12px;
 	overflow: hidden;
 }
 .opacity .con .con-top{
-	width: 2.7rem;
-	height: 1.17rem;
+	width: 270px;
+	height: 117px;
 	background: url(../imgs/opacity-bg.png) no-repeat;
 	background-size: contain;
 }
 .opacity .con p{
 	text-align: center;
-	line-height: .4rem;
+	line-height: 40px;
 	color: #222;
 }
 .opacity .con li{
 	float: left;
 	width: 50%;
-	line-height: .45rem;
+	line-height: 45px;
 	text-align: center;
 	color: #0076FF;
 	border-top: 1px solid #D8D8D8;
@@ -348,14 +336,9 @@
 }
 .opacity .reason h2{
 	display: block;
-	font-size: .18rem;
+	font-size: 18px;
 	color: #222;
 	text-align: center;
-	line-height: .4rem;
+	line-height: 40px;
 }
-.nothing img{
-	top: 1.2rem;
-}
-.nothing p{
-	margin-top: 3.2rem;
-}
+

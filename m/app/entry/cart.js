@@ -1,49 +1,24 @@
 import '../css/public.css';
 import '../css/cart.css';
-import $ from 'n-zepto';
+import $ from 'jquery';
 import apiUrl from '../js/config';
-import {rand,signName,reTop,url_search,setSto,getSto,imgLazy,classof,rmSto,cartPayCount,allSto,showImgLayer,cancelImgLayer} from '../js/config';
-
+import {rand,signName,reTop,url_search,setSto,cartCount,getSto,imgLazy,classof,rmSto,cartPayCount,allSto,showImgLayer,cancelImgLayer} from '../js/config';
 import md5 from 'md5';
 var vipNo=getSto('vipNo');
-console.log(allSto());
-//从哪来回哪去的页面返回
-(function(){
-    switch(url_search().from){
-        case 'index':
-            $('.cart>.cart-title>a').attr('href','index.html');
-        break;
-        case 'kind':
-            $('.cart>.cart-title>a').attr('href','kind-gift.html');
-        break;
-        case 'find':
-            $('.cart>.cart-title>a').attr('href','find.html');
-        break;
-        case 'center':
-            $('.cart>.cart-title>a').attr('href','user-center.html');
-        break;
-        case 'cart':
-            $('.cart>.cart-title>a').attr('href','index.html');
-        break;
-    }
-})();
-
-//删除商品详情前一面地址的记录
-rmSto('goods-prevurl');
-
+var token=getSto('token');
+//获取购物车数量
+cartCount($('.func-public em'));
 //购物车列表
 (function(){
-    var oUl=$('.cart>.cart-list>ul');
+    var oUl=$('.cart-list>ul');
     var str='';
     var oBtn=$('.pay-money');//结算按钮
-    var oPrice=$('.cart>.cart-pay .pay-price em');//商品价格展示
+    var oPrice=$('.account>.pay-money span');//商品价格展示
 
     if(vipNo){//登录
         var cartList=JSON.parse(getSto('tempCart'));
         var token=getSto('token');
-        //var vipNo=getSto('vipNo');
         if(cartList){//有临时购物车
-            
             $.ajax({
                 type:'post',
                 headers:signName(md5,vipNo,token),
@@ -63,7 +38,7 @@ rmSto('goods-prevurl');
                             rmSto('token');
                             rmSto('vipNo');
                             alert('出现错误，请重新登录！');
-                            location.href='user-center.html';
+                            location.href='personal-orders.html';
                         }
                         alert(data.head.message);
                     }
@@ -71,8 +46,8 @@ rmSto('goods-prevurl');
                     renderDom();
 
                 },
-                error:function(){
-
+                error:function(err){
+                	console.log('err:',err);
                 }
             });
         }else{//没有临时购物车
@@ -99,7 +74,7 @@ rmSto('goods-prevurl');
                             rmSto('token');
                             rmSto('vipNo');
                             alert('出现错误，请重新登录！');
-                            location.href='user-center.html';
+                            location.href='personal-orders.html';
                         }
                     }
 
@@ -112,65 +87,66 @@ rmSto('goods-prevurl');
                     }
                     cartPayCount(data.goodsList);
                     data.goodsList.forEach(function(item,index){
-                        
-                            str+=`<li class="cart-item" data-goodsid=${item.goodsId} data-id=${item.id} data-suit=${item.accessoryId} data-btn=${item.selected} data-comment=${item.comment}>
-                                <div class="cart-item-detail">
-                                    <div class="cart-item-l">`;
+                        str+=`<li class="cart-item" data-goodsid=${item.goodsId} data-id=${item.id} data-suit=${item.accessoryId} data-btn=${item.selected} data-comment=${item.comment}>
+                            <div class="cart-item-detail">
+                                <div class="cart-item-l">`;
 
-                                        if(item.soldout){
-                                            str+=`<span data-soldout="true" class="select-box grey"></span>`;
-                                            str+=`<div class="goods-pic">
-                                            <img src="" data-src=${item.picture} alt="">
-                                            <a href="goods-detail.html?id=${item.goodsId}"></a>`;
-                                            str+='<span style="display:block"></span>';
+                                    if(item.soldout){
+                                        str+=`<span data-soldout="true" class="select-box grey"></span>`;
+                                        str+=`<div class="goods-pic">
+                                        <img src="" data-src=${item.picture} alt="">
+                                        <a href="product-details.html?id=${item.goodsId}"></a>`;
+                                        str+='<span style="display:block"></span>';
 
+                                    }else{
+                                        if(item.selected){
+                                            str+=`<span data-soldout="false" class="select-box active"></span>`;
                                         }else{
-                                            if(item.selected){
-                                                str+=`<span data-soldout="false" class="select-box active"></span>`;
-                                            }else{
-                                                str+=`<span data-soldout="false" class="select-box"></span>`;
-                                            }
-                                            str+=`<div class="goods-pic">
-                                            <img src="" data-src=${item.picture} alt="">
-                                            <a href="goods-detail.html?id=${item.goodsId}"></a>`;
-                                            str+='<span style="display:none"></span>';
+                                            str+=`<span data-soldout="false" class="select-box"></span>`;
                                         }
-                                        str+=`</div>
-                                    </div>
-                                    <div class="cart-item-r">
-                                        <h3 class="goods-name"><a href="goods-detail.html?id=${item.goodsId}">${item.longName}</a></h3>`;
-                                        if(item.accessoryLength){
-                                            str+=`<p class="goods-material">配件：<em>${item.accessoryLength}</em></p>`;
-                                        }
-                                        str+=`<div class="goods-price">`;
-                                            str+='<span>￥'+parseInt(item.salePrice)+'</span>';
-                                            str+=`<div class="goods-count">
-                                                <span class="goods-minus">-</span>
-                                                <input type="number" value=${item.number} name="" disabled="disabled">
-                                                <span class="goods-add">+</span>
-                                            </div>
+                                        str+=`<div class="goods-pic">
+                                        <img src="" data-src=${item.picture} alt="">
+                                        <a href="product-details.html?id=${item.goodsId}"></a>`;
+                                        str+='<span style="display:none"></span>';
+                                    }
+                                    str+=`</div>
+                                </div>
+                                <div class="cart-item-r">
+                                    <h3 class="goods-name">`;
+                                    if(item.lowStock&&!item.soldout){
+	                                    str+=`<p>购买数量超出当前库存量</p>`;
+	                                }
+                                    str+=`<a href="product-details.html?id=${item.goodsId}">${item.longName}</a></h3>`;
+                                    if(item.accessoryLength){
+                                        str+=`<p class="goods-material">配件：<em>${item.accessoryLength}</em></p>`;
+                                    }else{
+                                    	str+=`<p class="goods-material"></p>`;
+                                    }
+                                    str+=`<div class="goods-price">`;
+                                        str+='<span>￥'+parseInt(item.salePrice)+'</span>';
+                                        str+=`<div class="goods-count">
+                                            <span class="goods-minus">-</span>
+                                            <input type="text" value=${item.number} name="" disabled="disabled">
+                                            <span class="goods-add">+</span>
                                         </div>
-                                    </div>
-                                </div>`;
-                                if(item.lowStock&&!item.soldout){
-                                    str+=`<div class="cart-item-remove"><span>购买数量超出当前库存量</span><em>删除</em><i></i></div>`;
-                                }else{
+                                    </div>`;
                                     str+=`<div class="cart-item-remove"><em>删除</em><i></i></div>`;
-                                }
-                                
-                            str+=`</li>`;
+                                str+=`</div>
+                            </div></li>`;
 
-                            if(item.selected){
-                                iPrice+=parseFloat(item.salePrice)*item.number;
-                            }
-                            $(oPrice).text('￥'+iPrice);
+                        if(item.selected){
+                            iPrice+=parseFloat(item.salePrice)*item.number;
+                        }
+                        $(oPrice).text('￥'+iPrice);
                             
                     });
 
                     oUl.get(0).innerHTML=str;
-
-                    cancelImgLayer();
-
+                    rmSto('tempOrderCart');
+                    //获取购物车数量
+					cartCount($('.func-public em'));
+                    //cancelImgLayer();
+                    //calcPrice();
                     //图片懒加载
                     (function(){
                         var aImg=$('.cart-item .goods-pic img');
@@ -180,7 +156,7 @@ rmSto('goods-prevurl');
                     
                     function calcPrice(){
                         var num=0;
-                        showImgLayer();
+                        //showImgLayer();
                         $.ajax({
                             type:'post',
                             headers:signName(md5,vipNo,token),
@@ -203,12 +179,11 @@ rmSto('goods-prevurl');
                                     return;
                                 }
                                 
-                                
                                 var data=data.body;
 
                                 if(!data.goodsList.length){
                                     $('.cart-nothing').css('display','block');
-                                    cancelImgLayer();
+                                    //cancelImgLayer();
                                     return;
                                 }
                                 data.goodsList.forEach(function(item,index){
@@ -230,12 +205,12 @@ rmSto('goods-prevurl');
                     //删除
                     removeItem();
                     function removeItem(){
-                        var aItem=$('.cart>.cart-list>ul li');
+                        var aItem=$('.wrap-cart>.cart-list li.cart-item');
                         var oWrap=$('.opacity');
                         var oBtn=$('.opacity .con li:last-of-type');
                         var oCancel=$('.opacity .con li:first-of-type');
 
-                        aItem.forEach(function(item,index){
+                        aItem.each(function(index,item){
                             $(item).find('.cart-item-remove em').on('click',function(){
                                 //console.log(item.dataset.goodsid);
                                 alertC(index);
@@ -274,7 +249,8 @@ rmSto('goods-prevurl');
                                         calcPrice();
                                         cancel();
                                         aItem[$(oBtn).get(0).dataset.index].remove();
-                                        cancelImgLayer();
+                                        //cancelImgLayer();
+                                        cartCount($('.func-public em'));
                                     }
 
 
@@ -309,10 +285,10 @@ rmSto('goods-prevurl');
                     //改变数量
                     changeNum();
                     function changeNum(){
-                        var aItem=$('.cart>.cart-list>ul li');
+                        var aItem=$('.wrap-cart>.cart-list li.cart-item');
                         var oCountWrap=$('.count-tips');
 
-                        aItem.forEach(function(item,index){
+                        aItem.each(function(index,item){
                             var iCount=$(item).find('.goods-count input').val();
                             //加
                             $(item).find('.goods-add').on('click',function(){
@@ -367,6 +343,7 @@ rmSto('goods-prevurl');
                                             if(item.dataset.btn=='true'){
                                                 calcPrice()
                                             }
+                                			cartCount($('.func-public em'));
                                         }
                                         cancelImgLayer();
                                     },
@@ -383,6 +360,7 @@ rmSto('goods-prevurl');
                                     return;
                                 }
                                 iCount--;
+
                                 //console.log('iCount:',iCount);
                                 showImgLayer('数据请求中...');
                                 $.ajax({
@@ -429,8 +407,9 @@ rmSto('goods-prevurl');
                                             if(item.dataset.btn=='true'){
                                                 calcPrice()
                                             }
+                                            cartCount($('.func-public em'));
                                         }
-                                        cancelImgLayer();
+                                        //cancelImgLayer();
                                     },
                                     error:function(err){
                                         console.log(err);
@@ -445,12 +424,12 @@ rmSto('goods-prevurl');
                     //选中未选中函数
                     changeStatus();
                     function changeStatus(){
-                        var aItem=$('.cart>.cart-list>ul li');
-                        var oAllBtn=$('.cart>.cart-pay .pay-price span');
+                        var aItem=$('.wrap-cart>.cart-list li.cart-item');
+                        var oAllBtn=$('.account>.pay-price span');
                         var iLen=aItem.length;
                         var iNum=0;//存储被选中的初始数量
                         var n=0;//存储可以被选中的初始数量
-                        aItem.forEach(function(item,index){
+                        aItem.each(function(index,item){
 
                             if($(item).find('.select-box').get(0).dataset.soldout=='false'){//存储可以被选中的初始数量
                                 n++;
@@ -571,9 +550,9 @@ rmSto('goods-prevurl');
 
                             //判断是不是能够点击全选按钮
                             var iSolidOutNum=0;
-                            var aLi=$('.cart>.cart-list>ul li');
+                            var aLi=$('.wrap-cart>.cart-list li.cart-item');
                             var iSolidOutLen=aLi.length;
-                            aLi.forEach(function(item,index){
+                            aLi.each(function(index,item){
                                 if($(item).find('.select-box').get(0).dataset.soldout=='true'){
                                     iSolidOutNum++;
                                 }
@@ -610,7 +589,7 @@ rmSto('goods-prevurl');
                                         $(_this).addClass('active');
                                         oAllBtn.get(0).dataset.btn='true';
 
-                                        aItem.forEach(function(item,index){
+                                        aItem.each(function(index,item){
                                             if($(item).find('.select-box').get(0).dataset.soldout=='false'){
                                                 $(item).find('.select-box').addClass('active');
                                                 item.dataset.btn='true';
@@ -659,7 +638,7 @@ rmSto('goods-prevurl');
                                         $(_this).removeClass('active');
                                         oAllBtn.get(0).dataset.btn='false';
 
-                                        aItem.forEach(function(item,index){
+                                        aItem.each(function(index,item){
                                             $(item).find('.select-box').removeClass('active');
                                             item.dataset.btn='false';
                                         });
@@ -715,15 +694,56 @@ rmSto('goods-prevurl');
                     var data=data.body;
 
                     data.goodsList.forEach(function(item,index){
-                        str+=`<li class="cart-item" data-goodsid=${item.goodsId} data-id=${item.id} data-suit=${item.accessoryId} data-btn=${item.selected} data-comment=${item.comment}>
-                                <div class="cart-item-detail">
-                                    <div class="cart-item-l">`;
+                        // str+=`<li class="cart-item" data-goodsid=${item.goodsId} data-id=${item.id} data-suit=${item.accessoryId} data-btn=${item.selected} data-comment=${item.comment}>
+                        //         <div class="cart-item-detail">
+                        //             <div class="cart-item-l">`;
                                     
+                        //             if(item.soldout){
+                        //                 str+=`<span data-soldout="true" class="select-box grey"></span>`;
+                        //                 str+=`<div class="goods-pic">
+                        //                 <img src="" data-src=${item.picture} alt="">
+                        //                 <a href="goods-detail.html?id=${item.goodsId}"></a>`;
+                        //                 str+='<span style="display:block"></span>';
+
+                        //             }else{
+                        //                 if(item.selected){
+                        //                     str+=`<span data-soldout="false" class="select-box active"></span>`;
+                        //                 }else{
+                        //                     str+=`<span data-soldout="false" class="select-box"></span>`;
+                        //                 }
+                        //                 str+=`<div class="goods-pic">
+                        //                 <img src="" data-src=${item.picture} alt="">
+                        //                 <a href="goods-detail.html?id=${item.goodsId}"></a>`;
+                        //                 str+='<span style="display:none"></span>';
+                        //             }
+                        //                 str+=`</div> 
+                        //             </div>
+                        //             <div class="cart-item-r">
+                        //                 <h3 class="goods-name"><a href="goods-detail.html?id=${item.goodsId}">${item.longName}</a></h3>`;
+                        //                 if(item.accessoryLength){
+                        //                     str+=`<p class="goods-material">配件：<em>${item.accessoryLength}</em></p>`;
+                        //                 }
+                        //                 str+=`<div class="goods-price">`;
+                        //                     str+='<span>￥'+parseInt(item.salePrice)+'</span>';
+                        //                     str+=`<div class="goods-count">
+                        //                         <span class="goods-minus">-</span>
+                        //                         <input type="number" value=${item.number} name="" disabled="disabled">
+                        //                         <span class="goods-add">+</span>
+                        //                     </div>
+                        //                 </div>
+                        //             </div>
+                        //         </div>
+                        //         <div class="cart-item-remove"><em>删除</em><i></i></div>
+                        //     </li>`;
+                            str+=`<li class="cart-item" data-goodsid=${item.goodsId} data-id=${item.id} data-suit=${item.accessoryId} data-btn=${item.selected} data-comment=${item.comment}>
+                            <div class="cart-item-detail">
+                                <div class="cart-item-l">`;
+
                                     if(item.soldout){
                                         str+=`<span data-soldout="true" class="select-box grey"></span>`;
                                         str+=`<div class="goods-pic">
                                         <img src="" data-src=${item.picture} alt="">
-                                        <a href="goods-detail.html?id=${item.goodsId}"></a>`;
+                                        <a href="product-details.html?id=${item.goodsId}"></a>`;
                                         str+='<span style="display:block"></span>';
 
                                     }else{
@@ -734,28 +754,33 @@ rmSto('goods-prevurl');
                                         }
                                         str+=`<div class="goods-pic">
                                         <img src="" data-src=${item.picture} alt="">
-                                        <a href="goods-detail.html?id=${item.goodsId}"></a>`;
+                                        <a href="product-details.html?id=${item.goodsId}"></a>`;
                                         str+='<span style="display:none"></span>';
                                     }
-                                        str+=`</div> 
-                                    </div>
-                                    <div class="cart-item-r">
-                                        <h3 class="goods-name"><a href="goods-detail.html?id=${item.goodsId}">${item.longName}</a></h3>`;
-                                        if(item.accessoryLength){
-                                            str+=`<p class="goods-material">配件：<em>${item.accessoryLength}</em></p>`;
-                                        }
-                                        str+=`<div class="goods-price">`;
-                                            str+='<span>￥'+parseInt(item.salePrice)+'</span>';
-                                            str+=`<div class="goods-count">
-                                                <span class="goods-minus">-</span>
-                                                <input type="number" value=${item.number} name="" disabled="disabled">
-                                                <span class="goods-add">+</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    str+=`</div>
                                 </div>
-                                <div class="cart-item-remove"><em>删除</em><i></i></div>
-                            </li>`;
+                                <div class="cart-item-r">
+                                    <h3 class="goods-name">`;
+                                    if(item.lowStock&&!item.soldout){
+	                                    str+=`<p>购买数量超出当前库存量</p>`;
+	                                }
+                                    str+=`<a href="product-details.html?id=${item.goodsId}">${item.longName}</a></h3>`;
+                                    if(item.accessoryLength){
+                                        str+=`<p class="goods-material">配件：<em>${item.accessoryLength}</em></p>`;
+                                    }else{
+                                    	str+=`<p class="goods-material"></p>`;
+                                    }
+                                    str+=`<div class="goods-price">`;
+                                        str+='<span>￥'+parseInt(item.salePrice)+'</span>';
+                                        str+=`<div class="goods-count">
+                                            <span class="goods-minus">-</span>
+                                            <input type="text" value=${item.number} name="" disabled="disabled">
+                                            <span class="goods-add">+</span>
+                                        </div>
+                                    </div>`;
+                                    str+=`<div class="cart-item-remove"><em>删除</em><i></i></div>`;
+                                str+=`</div>
+                            </div></li>`;
 
                             if(item.selected){
                                 iPrice+=parseFloat(item.salePrice)*item.number;
@@ -764,7 +789,7 @@ rmSto('goods-prevurl');
                     });
 
                     oUl.get(0).innerHTML=str;
-                    cancelImgLayer();
+                    //cancelImgLayer();
                     //图片懒加载
                     (function(){
                         var aImg=$('.cart-item .goods-pic img');
@@ -780,7 +805,7 @@ rmSto('goods-prevurl');
                 },
                 error:function(err){
                     console.log(err);
-                    cancelImgLayer();
+                    //cancelImgLayer();
                 }
             });
         }
@@ -832,12 +857,12 @@ rmSto('goods-prevurl');
 
         //删除项
         function removeItem(){
-            var aItem=$('.cart>.cart-list>ul li');
+            var aItem=$('.wrap-cart>.cart-list li.cart-item');
             var oWrap=$('.opacity');
             var oBtn=$('.opacity .con li:last-of-type');
             var oCancel=$('.opacity .con li:first-of-type');
 
-            aItem.forEach(function(item,index){
+            aItem.each(function(index,item){
                 $(item).find('.cart-item-remove em').on('click',function(){
                     
                     alertC(index);
@@ -854,7 +879,7 @@ rmSto('goods-prevurl');
                 
                 $(aItem[$(this).get(0).dataset.index]).remove();
 
-                var aItem1=$('.cart>.cart-list>ul li');
+                var aItem1=$('.wrap-cart>.cart-list li.cart-item');
                 updateData(aItem1);
                 calcPrice();
                 cancel();
@@ -880,13 +905,13 @@ rmSto('goods-prevurl');
 
         //选中未选中函数
         function changeStatus(){
-            var aItem=$('.cart>.cart-list>ul li');
-            var oAllBtn=$('.cart>.cart-pay .pay-price span');
+            var aItem=$('.wrap-cart>.cart-list li.cart-item');
+            var oAllBtn=$('.account>.pay-price span');
             //var iLen=aItem.length;
             var iNum=0;
             var n=0;//存储可以被选中的数量
 
-            aItem.forEach(function(item,index){
+            aItem.each(function(index,item){
 
                 if($(item).find('.select-box').get(0).dataset.soldout=='false'){//存储可以被选中的初始数量
                     n++;
@@ -906,7 +931,7 @@ rmSto('goods-prevurl');
                         $(this).addClass('active');
                         iNum++;
                     }
-                    var aItem1=$('.cart>.cart-list>ul li');
+                    var aItem1=$('.wrap-cart>.cart-list li.cart-item');
                     updateData(aItem1);
 
                     if(iNum==n&&iNum!=0){
@@ -937,9 +962,9 @@ rmSto('goods-prevurl');
 
                 //判断是不是能够点击全选按钮
                 var iSolidOutNum=0;
-                var aLi=$('.cart>.cart-list>ul li');
+                var aLi=$('.wrap-cart>.cart-list li.cart-item');
                 var iSolidOutLen=aLi.length;
-                aLi.forEach(function(item,index){
+                aLi.each(function(index,item){
                     if($(item).find('.select-box').get(0).dataset.soldout=='true'){
                         iSolidOutNum++;
                     }
@@ -958,7 +983,7 @@ rmSto('goods-prevurl');
                     // });
                     // iNum=aItem.length;
 
-                    aItem.forEach(function(item,index){
+                    aItem.each(function(index,item){
                         if($(item).find('.select-box').get(0).dataset.soldout=='false'){
                             $(item).find('.select-box').addClass('active');
                             item.dataset.btn='true';
@@ -971,14 +996,14 @@ rmSto('goods-prevurl');
                     $(_this).removeClass('active');
                     oAllBtn.get(0).dataset.btn='false';
 
-                    aItem.forEach(function(item,index){
+                    aItem.each(function(index,item){
                         $(item).find('.select-box').removeClass('active');
                         item.dataset.btn='false';
                     });
                     iNum=0;
                 }
 
-                var aItem1=$('.cart>.cart-list>ul li');
+                var aItem1=$('.wrap-cart>.cart-list li.cart-item');
                 updateData(aItem1);
                 calcPrice();
             });
@@ -986,9 +1011,9 @@ rmSto('goods-prevurl');
 
         //改变数量
         function changeNum(){
-            var aItem=$('.cart>.cart-list>ul li');
+            var aItem=$('.wrap-cart>.cart-list li.cart-item');
 
-            aItem.forEach(function(item,index){
+            aItem.each(function(index,item){
                 var iCount=$(item).find('.goods-count input').val();
                 //加
                 $(item).find('.goods-add').on('click',function(){
@@ -998,7 +1023,7 @@ rmSto('goods-prevurl');
                     iCount++;
                     $(item).find('.goods-count input').val(iCount);
 
-                    var aItem1=$('.cart>.cart-list>ul li');
+                    var aItem1=$('.wrap-cart>.cart-list li.cart-item');
                     updateData(aItem1);
                     calcPrice();
                 });
@@ -1010,7 +1035,7 @@ rmSto('goods-prevurl');
                     iCount--;
                     $(item).find('.goods-count input').val(iCount);
 
-                    var aItem1=$('.cart>.cart-list>ul li');
+                    var aItem1=$('.wrap-cart>.cart-list li.cart-item');
                     updateData(aItem1);
                     calcPrice();
                 });
@@ -1021,7 +1046,7 @@ rmSto('goods-prevurl');
         function updateData(aItem){
 
             var arr=[];
-            aItem.forEach(function(item,index){
+            aItem.each(function(index,item){
                 //console.log(typeof $(item).get(0).dataset.btn.valueOf());
                 arr.push({
                     goodsId:item.dataset.goodsid,
@@ -1038,10 +1063,10 @@ rmSto('goods-prevurl');
 
     //点击结算
     $(oBtn).on('click',function(){
-        var aItem=$('.cart>.cart-list>ul li');
+        var aItem=$('.wrap-cart>.cart-list li.cart-item');
         var arr=[];
 
-        aItem.forEach(function(item,index){
+        aItem.each(function(index,item){
             //console.log(typeof $(item).get(0).dataset.btn.valueOf());
             if($(item).get(0).dataset.btn=='true'){
                 arr.push({
@@ -1062,15 +1087,6 @@ rmSto('goods-prevurl');
 
         setSto('tempOrderCart',JSON.stringify(arr));
 
-        location.href='ok-order.html?type=2&from='+url_search().from+'&f=cart';
-    });
-})();
-
-//客服
-(function(){
-    var oBtn=$('.cart>.cart-title i');
-
-    $(oBtn).on('click',function(){
-        location.href='jump.html';
+        location.href='ok-order.html?from=cart';
     });
 })();

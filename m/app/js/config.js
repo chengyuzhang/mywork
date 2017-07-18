@@ -1,5 +1,6 @@
+
 //const apiUrl='http://192.168.30.49:8081';
-//const apiUrl='http://192.168.30.66:8081';
+//const apiUrl='http://192.168.30.31:8081';
 const apiUrl='http://192.168.4.87:8081';
 //const apiUrl='http://192.168.4.87:9091';
 //const apiUrl='http://www.oohdear.com/mobile';
@@ -61,52 +62,6 @@ export function reTop(obj){
 	});
 }
 
-//底部导航栏显示隐藏函数
-export function tabBar(){
-    var oBar=$('.index-nav');
-    var timer=null;
-    var timer1=null;
-    var timer2=null;
-   
-    var sY=0;
-    var eY=0;
-
-    $('body').on('touchstart',function(ev){
-        var touch=ev.changedTouches[0];
-        
-        sY=touch.clientY;
-    });
-
-    $('body').on('touchmove',function(ev){
-        var touch=ev.changedTouches[0];
-
-        eY=touch.clientY;
-        if((eY-sY)!=0){
-            clearTimeout(timer);
-            clearTimeout(timer1);
-            clearTimeout(timer2);
-            oBar.css('opacity',0);
-            timer1=setTimeout(function(){
-                oBar.css('display','none');
-            },250);
-        }
-    });
-
-    $('body').on('touchend',function(ev){
-        var touch=ev.changedTouches[0];
-
-        eY=touch.clientY;
-        clearTimeout(timer1);
-        timer=setTimeout(function(){
-            
-            oBar.css('display','block');
-            timer2=setTimeout(function(){
-                oBar.css('opacity',1);
-            },50);
-        },500);
-    });
-}
-
 //url查询部分转换成对象函数
 export function url2json(str){
     var json={};
@@ -128,47 +83,117 @@ export function url_search(url){
 	}
 }
 
+//列表图片剧中
+export function imgPos(aImg){
+    var iHeight=$(aImg).eq(0).parent().height();
+    var iWidth=$(aImg).eq(0).parent().width();
+    console.log(iHeight,iWidth);
+    var iW='';
+    var iH='';
+    aImg.each(function(index,item){
+        $(item).get(0).onload=function(){
+            iW=$(item).get(0).offsetWidth;
+            iH=$(item).get(0).offsetHeight;
+
+            if(iW/iH>(iWidth/iHeight)){
+                $(item).css({
+                    'height':iHeight,
+                    'left':'50%',
+                    'margin-left':parseInt(-iW*iHeight/iH/2),
+                    'opacity':1
+                });
+            }else{
+                $(item).css({
+                    'width':iWidth,
+                    'top':'50%',
+                    'margin-top':parseInt(-iH*iWidth/iW/2),
+                    'opacity':1
+                });
+            }
+        };
+    });
+}
+
 //图片懒加载
 export function imgLazy(img){
     var timer=null;
     var timer1=null;
     var screenH=window.screen.height;
 
-    img.forEach(function(item,index){
-		var iTop=item.getBoundingClientRect().top;
-		if(iTop<=screenH){
-			$(item).attr('src',$(item).get(0).dataset.src);
-			$(item).get(0).onload=function(){
-				$(item).css('opacity',1);
-			};
-		}
-	});
-
-	$('body').on('touchmove',function(ev){
-		clearInterval(timer);
-    	clearInterval(timer1);
-        var touch=ev.changedTouches[0];
-        timer=setInterval(function(){
-			img.forEach(function(item,index){
-				var iTop=item.getBoundingClientRect().top;
-				if(iTop<=screenH){
-					$(item).attr('src',$(item).get(0).dataset.src);
-					$(item).get(0).onload=function(){
-						$(item).css('opacity',1);
-					};
-				}
-			});
-
-        },50);
-	});
-	
-	$('body').on('touchend',function(ev){
-        timer1=setTimeout(function(){
-        	clearInterval(timer);
-        	clearInterval(timer1);
-        },1500);
+    img.each(function(index,item){
+        var iTop=item.getBoundingClientRect().top;
+        if(iTop<=screenH){
+            $(item).attr('src',$(item).get(0).dataset.src);
+            $(item).get(0).onload=function(){
+                $(item).css('opacity',1);
+            };
+        }
     });
 
+    $('body').on('scroll',function(ev){
+        clearInterval(timer);
+        clearTimeout(timer1);
+        //var touch=ev.changedTouches[0];
+        timer=setInterval(function(){
+            img.each(function(index,item){
+                var iTop=item.getBoundingClientRect().top;
+                if(iTop<=screenH){
+                    $(item).attr('src',$(item).get(0).dataset.src);
+                    $(item).get(0).onload=function(){
+                        $(item).css('opacity',1);
+                    };
+                }
+            });
+        },100);
+
+        // timer=setTimeout(function(){
+        //     clearInterval(timer);
+        //     clearTimeout(timer1);
+        // },500);
+    });
+    
+
+}
+export function imgLazyForFind(img){
+    var timer=null;
+    var timer1=null;
+    var screenH=window.screen.height;
+
+    img.each(function(index,item){
+
+        var iTop=item.getBoundingClientRect().top;
+        if(iTop<=screenH){
+            $(item).attr('src',$(item).get(0).dataset.src);
+            $(item).get(0).onload=function(){
+                $(item).css('opacity',1);
+            };
+            imgPos(img);
+        }
+    });
+
+    $('body').on('scroll',function(ev){
+        clearInterval(timer);
+        clearTimeout(timer1)
+        //var touch=ev.changedTouches[0];
+        timer=setInterval(function(){
+            img.each(function(index,item){
+
+                var iTop=item.getBoundingClientRect().top;
+                if(iTop<=screenH){
+                    $(item).attr('src',$(item).get(0).dataset.src);
+                    $(item).get(0).onload=function(){
+                        $(item).css('opacity',1);
+                    };
+                    imgPos(img);
+                }
+            });
+        },100);
+
+        timer1=setTimeout(function(){
+            clearTimeout(timer1);
+            clearInterval(timer);
+        },500);
+    });
 }
 
 //查找项在数组中的位置
@@ -287,7 +312,7 @@ export function cartCount(obj){
             data:{
                 memberNo:vipNo
             },
-            success:function(data){console.log('x:',data);
+            success:function(data){
                 if(data.head.code){
                     if(data.head.code==71982){
                         rmSto('nickname');
@@ -328,7 +353,7 @@ export function cartPayCount(arr){
     var num=0;
 
     //购物车气泡显示
-    var oNum=$('.cart>.cart-pay .pay-money i');
+    var oNum=$('.account>.pay-price em i');
     
     arr.forEach(function(item,index){
     	if(item.selected){

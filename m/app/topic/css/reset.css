@@ -20,7 +20,6 @@ time, mark, audio, video, button,input {
 	font-family: "Microsoft Yahei", Geneva, sans-serif; font-size:.12rem;
 	box-sizing: border-box;
 	color: #fff;
-	-webkit-overflow-scrolling : touch;
 }
 html,body{
 	width: 100%;

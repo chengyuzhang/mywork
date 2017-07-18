@@ -1,519 +1,1288 @@
 import '../css/public.css';
 import '../css/search.css';
-import $ from 'n-zepto';
-//接口地址
+import $ from 'jquery';
 import apiUrl from '../js/config';
-import {rand,signName,reTop,url_search,noRepeat,rmSto} from '../js/config';
+import {rand,signName,reTop,tabBar,imgLazy,setSto,getSto,cartCount,rmSto,allSto,getLto,noRepeat,setLto,rmLto} from '../js/config';
 import md5 from 'md5';
+var vipNo=getSto('vipNo');
+var token=getSto('token');
+//获取购物车数量
+cartCount($('.func-public em'));
 
-//上滑返回顶部
-(function(){
-	var oWrap=$('.wrap');
+var getUrl=apiUrl+'/home/queryHomeGoodsByPage';
+var sortId=[];
+var styleId=[];
+var materialId=[];
+var priceId=[];
+var targetId=[];
+var labelId=[];
+var keyVal='';//搜索关键字
+var statusBtn=true;
+var pageNum=1;
+var pageSize=16;
+var saleIndex;
+var styleIndex;
+var materialIndex;
+var priceIndex;
+var jsonData={
+        type:4,
+        pageNum:pageNum,
+        pageSize:pageSize
+    };
 
-	reTop(oWrap);
-	
-})();
+var iBtn=true;//控制分页器只布局一次的关
+////////////////////////////////////弹出送给谁及为了庆祝什么的弹层////////////////////////////////////
+var timer=null;
 
-//从哪来回哪去的页面返回
-// (function(){
-//     switch(url_search().from){
+$('.kind-gife .for-who').get(0).onclick=$('.kind-gife .for-what').get(0).onclick=function(){
+	$('.for-list-public').css('display','block');
+	timer=setTimeout(function(){
+		$('.for-list-public').css('opacity',1);
+	},50);
+};
+
+var forWhoUl=$('.for-who-list-public');
+var forWhatUl=$('.for-what-list-public');
+var forWhoLi=$('.for-who-list-public li');
+var forWhatLi=$('.for-what-list-public li');
+var sLabel='';
+
+//送给谁和为了庆祝什么
+$.ajax({
+    type:'get',
+    url:apiUrl+'/home/queryLabels',
+    data:{},
+    success:function(data){
         
-//         case 'find':
-//             $('.search-bar>span>a').attr('href','find.html');
-//         break;
-//     }
-// })();
+        if(data.head.code){
+            console.log(data.head.message);
+            return;
+        }
+        var data=data.body;
 
-//清空搜索
-(function(){
-	var oBtn=$('.search-cancel');
-	var oText=$('.search-input');
-	oBtn.on('click',function(){
-		$(oText).val('');
-		$(oText).get(0).focus();
-	});
-})();
+        data.labels.forEach(function(item,index){
+            sLabel+=`<li data-id=${item.id}>${item.labelContent}<i></i></li>`;
+        });
+        $(forWhatUl).html(sLabel);
 
-//热门标签
-(function(){
-	var oWrap=$('.hot>ul');
-	var str='';
-	$.ajax({
-		url:apiUrl+'/article/label',
-		success:function(data){
-			var arr=data.body.labels;
-			
-			arr.forEach(function(item,index){
-				str+='<li id='+item.id+'>'+item.labelContent+'</li>'
+        var forWhatLi=$('.for-what-list-public li');
+
+        //送给谁的点击选择
+        forWhoLi.each(function(index,item){
+            $(item).attr('data-btn','true');
+
+            $(item).on('click',function(){
+                if($(this).hasClass('active')){//连续点击未选中单个按钮
+                    $(item).attr('data-btn','true');
+                    $(item).removeClass('active');
+                    targetId[0]='';
+                    $('.for-who p').text('送给谁？');
+                }else{//选中单个按钮
+                    forWhoLi.each(function(index1,item1){
+                        $(item1).attr('data-btn','true');
+                        $(item1).removeClass('active');
+                    });
+                    $(this).attr('data-btn','false');
+                    $(this).addClass('active');
+                    targetId[0]=parseInt(item.dataset.id);
+                    $('.for-who p').text($(this).text());
+                }
+
+                //选择宝爸宝妈时“为了庆祝什么”的显示和隐藏
+                forWhoLi.each(function(index1,item1){
+                    if($(item1).hasClass('parents')){
+                        forWhatLi.each(function(index,item){
+                            $(item).attr('data-btn','true');
+                            $(item).removeClass('active');
+                            $('.for-what p').text('为了庆祝什么？');
+                        });
+
+                        if($(item1).attr('data-btn')=='false'){
+                            forWhatUl.css('display','none');
+                        }else if($(item1).attr('data-btn')=='true'){
+                            forWhatUl.css('display','block');
+                        }
+
+                        labelId[0]='';
+                    }
+
+                });
+            });
+        });
+
+        //为了庆祝什么的点击选择
+        forWhatLi.each(function(index,item){
+            $(item).attr('data-btn','true');
+
+            $(item).on('click',function(){
+                if($(this).hasClass('active')){//连续点击未选中单个按钮
+                    $(item).attr('data-btn','true');
+                    $(item).removeClass('active');
+                    labelId[0]='';
+                    $('.for-what p').text('为了庆祝什么？');
+                }else{//选中单个按钮
+                    forWhatLi.each(function(index,item){
+                        $(item).attr('data-btn','true');
+                        $(item).removeClass('active');
+                    });
+                    $(this).attr('data-btn','false');
+                    $(this).addClass('active');
+                    labelId[0]=parseInt(item.dataset.id);
+                    $('.for-what p').text($(this).text());
+                }
+            });
+        });
+        var aOlLi=$('.tab-bar-public li');//选项栏的tab项
+
+        //确定按钮点击
+        $('.search-finish').get(0).onclick=function(){
+            $('.for-list-public').css('opacity',0);
+            timer=setTimeout(function(){
+                $('.for-list-public').css('display','none');
+            },550);
+
+            //console.log('targetId:',targetId,'-labelId:',labelId);
+            keyVal='';
+			sortId=[];
+			styleId=[];
+			materialId=[];
+			priceId=[];
+            getUrl=apiUrl+'/home/list/queryGoodsByParamAndPage';
+           	jsonData={
+		        pageNum:pageNum,
+		        pageSize:pageSize,
+		        targetIds:targetId,
+                labelIds:labelId,
+                sortIds:sortId,
+                styleIds:styleId,
+                materialIds:materialId,
+                priceIds:priceId
+		    };
+
+			iBtn=true;//控制分页器只布局一次的关
+			dataRender();
+			saleIndex=9;
+			styleIndex=9;
+			materialIndex=9;
+			priceIndex=9;
+			$('.tab-bar-con li').each(function(index,item){console.log(1111);
+				$(item).removeClass('active');
 			});
-			oWrap.html(str);
+			$(aOlLi[0]).find('span').html('人气');
+			$(aOlLi[1]).find('span').html('款式');
+			$(aOlLi[2]).find('span').html('材质');
+			$(aOlLi[3]).find('span').html('价格范围');
+        };
+    },
+    error:function(err){
+        console.log(err);
+        return;
+    }
+});
 
-			//点击热门标签
-			(function(){
-				var aLi=$('.hot>ul>li');
-				aLi.forEach(function(item,index){
-					$(item).on('click',function(){
-						window.location.href=encodeURI(encodeURI('result.html?id='+$(item).get(0).id+'&name='+$(item).text()));
-					});
-				});
-			})();
-		},
-		error:function(err){
-			console.log(err);
-		}
-	});
-})();
 
-//推荐文章
+////////////////////////////////////获取选项栏及列表数据////////////////////////////////////
+//选项栏的展开和收缩
 (function(){
-	var oWrap=$('.recomand-article>ul');
-	var str='';
-	$.ajax({
-		url:apiUrl+'/article/recommended',
-		success:function(data){
-			
-			var arr=data.body.goodsVoList;
+ var aTab=$('.tab-bar-public>li');
+ var oCon=$('.tab-bar-con');
 
-			arr.forEach(function(item,index){
-				str+='<li id='+item.id+' class="item"><section class="block">';
-                //str+='<img class="show-pic" src="'+item.cover+'" alt=""><h2 class="title">'+item.title+'</h2>';
-                str+='<a href="detail.html?from=search&id='+item.id+'"><div class="img-wrap"><img class="show-pic" src="'+item.cover+'" ></div>';
-                str+='<h2 class="title">'+item.title+'</h2>';
-                str+='<div class="item-foot"><span class="time">'+item.publishTime+'</span><em class="kind">'+item.labels+'</em>';
-                str+='</div></a></section></li>';
-			});
+ aTab.each(function(index,item){
+     item.dataset.btn='false';
 
-			oWrap.html(str);
-			var aImg=$('.show-pic');
-			imgPos(aImg);
-		},
-		error:function(err){
-			console.log(err);
-		}
-	});
+     $(item).on('click',function(){
+         if(item.dataset.btn=='false'){
+            aTab.each(function(index1,item1){
+                item1.dataset.btn='false';
+            });
+            item.dataset.btn='true';
+            $('.tab-bar-con').css('display','block');
+            setTimeout(function(){
+                $('.tab-bar-con').css('opacity',1);
+            },50);
+         }else{
+            item.dataset.btn='false';
+            $('.tab-bar-con').css('opacity',0);
+            setTimeout(function(){
+                $('.tab-bar-con').css('display','none');
+            },500);
+         }
+     });
+ });
 })();
+
+var oOl=$('.tab-bar-public');//选项栏外层
+var aOlLi=$('.tab-bar-public li');//选项栏的tab项
+var itemCon=$('.tab-bar-con ul');
+var str='';
+
+//选项栏
+$.ajax({
+    type:'get',
+    url:apiUrl+'/search/result/queryConfig',
+    data:{
+    },
+    success:function(data){
+        //console.log(data);
+        if(data.head.code){
+            console.log(data.head.message);
+            return;
+        }
+        var data=data.body;
+        console.log('x:',data);
+        //为了保持前一个选项栏的选中状态而对数据进行加工(增加每项active的状态记录)
+        // for(var name in data){
+        //     data[name].forEach(function(item,index){
+        //         if(index==0){
+        //             //item.active=true;
+        //         }else{
+        //             item.active=false;
+        //         }
+        //     });
+        // }
+        //切换选项栏数据
+        aOlLi.each(function(index,item){
+            $(item).on('click',function(){
+                var strItem='';
+                
+                switch(index){
+                    case 0:
+                        renderTab(data.sorts,strItem,'sorts');
+                    break;
+                    case 1:
+                        renderTab(data.styles,strItem,'styles');
+                    break;
+                    case 2:
+                        renderTab(data.materials,strItem,'materials');
+                    break;
+                    case 3:
+                        renderTab(data.prices,strItem,'prices');
+                    break;
+                }
+
+                //点击选项
+                var aItem=$('.tab-bar-con li');//选项栏的内容项
+                
+                //点击选项栏获取不同排序的数据
+                aItem.each(function(index1,item1){
+                    $(item1).on('click',function(){
+                        switch(item1.dataset.type){
+                            case 'sorts':
+                                sortId[0]=parseInt(item1.dataset.id);
+                                var sText=$(item1).find('span').text();
+                                $(aOlLi[0]).find('span').html(sText);
+                                saleIndex=index1;
+                            break;
+                            case 'styles':
+                                styleId[0]=parseInt(item1.dataset.id);
+                                $(aOlLi[1]).find('span').text($(item1).find('span').text());
+                                styleIndex=index1;
+                            break;
+                            case 'materials':
+                                materialId[0]=parseInt(item1.dataset.id);
+                                $(aOlLi[2]).find('span').text($(item1).find('span').text());
+                                materialIndex=index1;
+                            break;
+                            case 'prices':
+                                priceId[0]=parseInt(item1.dataset.id);
+                                $(aOlLi[3]).find('span').text($(item1).find('span').text());
+                                priceIndex=index1;
+                            break;
+                        }
+                        statusBtn=true;
+                        //保持前一个选项栏的选中状态
+                        
+                    	// data[item1.dataset.type].forEach(function(item2,index2){
+                     //        item2.active=false;
+                     //    });
+                     //    data[item1.dataset.type][index1].active=true;
+
+                        //选中项后折回
+                        $('.tab-bar-con').css('opacity',0);
+			            setTimeout(function(){
+			            	$('.tab-bar-con').css('display','none');
+			            },500);
+                        $(aOlLi).each(function(index1,item1){
+                            item1.dataset.btn='false';
+                        });
+
+                        //console.log('sortId:',sortId,'-styleId:',styleId,'-materialId:',materialId,'-priceId:',priceId);
+                        //console.log(classof(sortId));
+                       
+                        getUrl=apiUrl+'/search/result/queryGoodsBykeyWordAndPage';
+			           	jsonData={
+					        pageNum:pageNum,
+					        pageSize:pageSize,
+					        targetIds:targetId,
+			                labelIds:labelId,
+			                sortIds:sortId,
+			                styleIds:styleId,
+			                materialIds:materialId,
+			                priceIds:priceId,
+			                keyWord:keyVal
+					    };
+
+						iBtn=true;//控制分页器只布局一次的关
+						dataRender();
+
+                        aItem.each(function(index2,item2){
+                            $(item2).removeClass('active');
+                        });
+                        $(item1).addClass('active');
+                    });
+                });
+            });
+        });
+
+        function renderTab(arr,str,type){
+            arr.forEach(function(item,index){
+
+        	 	if(type=='sorts'){
+        	 		if(saleIndex==index){
+	        	 		str+=`<li class="active" data-id=${item.id} data-type=${type}>`;
+	                        str+='<span>'+item.name+'</span>';
+	                        str+=`<i></i>
+	                    </li>`;
+        	 		}else{
+	        	 		str+=`<li class="" data-id=${item.id} data-type=${type}>`;
+	                        str+='<span>'+item.name+'</span>';
+	                        str+=`<i></i>
+	                    </li>`;
+        	 		}
+        	 	}
+
+        	 	if(type=='styles'){
+        	 		if(styleIndex==index){
+	        	 		str+=`<li class="active" data-id=${item.id} data-type=${type}>`;
+	                        str+='<span>'+item.name+'</span>';
+	                        str+=`<i></i>
+	                    </li>`;
+        	 		}else{
+	        	 		str+=`<li class="" data-id=${item.id} data-type=${type}>`;
+	                        str+='<span>'+item.name+'</span>';
+	                        str+=`<i></i>
+	                    </li>`;
+        	 		}
+        	 	}
+
+        	 	if(type=='materials'){
+        	 		if(materialIndex==index){
+	        	 		str+=`<li class="active" data-id=${item.id} data-type=${type}>`;
+	                        str+='<span>'+item.name+'</span>';
+	                        str+=`<i></i>
+	                    </li>`;
+        	 		}else{
+	        	 		str+=`<li class="" data-id=${item.id} data-type=${type}>`;
+	                        str+='<span>'+item.name+'</span>';
+	                        str+=`<i></i>
+	                    </li>`;
+        	 		}
+        	 	}
+
+        	 	if(type=='prices'){
+        	 		if(priceIndex==index){
+	        	 		str+=`<li class="active" data-id=${item.id} data-type=${type}>`;
+	                        str+='<span>'+item.name+'</span>';
+	                        str+=`<i></i>
+	                    </li>`;
+        	 		}else{
+	        	 		str+=`<li class="" data-id=${item.id} data-type=${type}>`;
+	                        str+='<span>'+item.name+'</span>';
+	                        str+=`<i></i>
+	                    </li>`;
+        	 		}
+        	 	}
+
+                // if(item.active){
+                //     if(type=='sorts'&&item.id==3){
+                //         str+=`<li class="active" data-id=${item.id} data-type=${type}>`;
+                //             str+='<span>'+item.name+'</span>';
+                //             str+=`<i></i>
+                //         </li>`;
+                //     }else if(type=='sorts'&&item.id==4){
+                //         str+=`<li class="active" data-id=${item.id} data-type=${type}>`;
+                //             str+='<span>'+item.name+'</span>';
+                //             str+=`<i></i>
+                //         </li>`;
+                //     }else{
+                //         str+=`<li class="active" data-id=${item.id} data-type=${type}>
+                //             <span>${item.name}</span>
+                //             <i></i>
+                //         </li>`;
+                //     }
+                // }else{ 
+                //     if(type=='sorts'&&item.id==3){
+                //         str+=`<li class="" data-id=${item.id} data-type=${type}>`;
+                //             str+='<span>'+item.name+'</span>';
+                //             str+=`<i></i>
+                //         </li>`;
+                //     }else if(type=='sorts'&&item.id==4){
+                //         str+=`<li class="" data-id=${item.id} data-type=${type}>`;
+                //             str+='<span>'+item.name+'</span>';
+                //             str+=`<i></i>
+                //         </li>`;
+                //     }else{
+                //         str+=`<li class="" data-id=${item.id} data-type=${type}>
+                //             <span>${item.name}</span>
+                //             <i></i>
+                //         </li>`;
+                //     }
+                // }
+            });
+            $(itemCon).html(str);
+            // $('.tab-bar-con').css('display','block');
+            // setTimeout(function(){
+            // 	$('.tab-bar-con').css('opacity',1);
+            // },50);
+        }
+    },
+    error:function(err){
+        console.log(err);
+        return;
+    }
+});
 
 //搜索//////////////////////////////////////////////////////////////////////////////////
-(function(){
-	var iLogin=true;//判断登录条件
-	var oInput=$('.search-input');
-	var oUl=$('.history ul');
-	var oSearchBtn=$('.search-bar>a');
-	var vipNo=sessionStorage.getItem("vipNo");
-	var token=sessionStorage.getItem("token");
-	
-	if(parseInt(vipNo)){//登录
-		//添加搜索记录
-		oInput.focus();
-		$(oSearchBtn).on('click',function(){
-			
-				var val=oInput.val();
-				if(val!=''){
-					
-					$.ajax({
-						url:apiUrl+'/user/search/add?memberNo='+vipNo+'&searchContent='+val+'&businessCase=1',
-						headers:signName(md5,vipNo,token),
-						success:function(data){
-							
-							if(data.head.code){
 
-	                        	if(data.head.code==71982){
-				                    rmSto('nickname');
-				                    rmSto('timestamp');
-				                    rmSto('token');
-				                    rmSto('vipNo');
-				                    alert('出现错误，请重新登录！');
-				                    location.href='user-center.html';
-				                }
-	                            alert(data.head.message);
-	                            return;
-	                        }
-							window.location.href=encodeURI(encodeURI('search-result.html?keyword='+val));
-						},
-						error:function(err){
-							console.log(err);
-						},
-					});
-					
-				}else{
-					alert('搜索内容不能为空');
-				}
-			
+var iLogin=true;//判断登录条件
+var oInput=$('.for-search input');
+var oUl=$('.goods-history ul');
+var oSearchBtn=$('.btn-search');
+//var vipNo=sessionStorage.getItem("vipNo");
+//var token=sessionStorage.getItem("token");
+
+$(document).on('click',function(){
+    $('.goods-history').css('display','none');
+    
+});
+
+oInput.on('click',function(ev){
+    ev.stopPropagation();
+});
+
+//标签搜索
+var aLabel=$('.search-classify li');
+aLabel.each(function(index,item){
+	$(item).on('click',function(){
+		keyVal=$(item).text();
+		targetId=[];
+		labelId=[];
+		sortId=[];
+		styleId=[];
+		materialId=[];
+		priceId=[];
+		jsonData={
+			type:1,
+	        pageNum:pageNum,
+	        pageSize:pageSize,
+	        keyWord:keyVal
+	    };
+	    getUrl=apiUrl+'/search/result/queryGoodsBykeyWordAndPage';
+		iBtn=true;//控制分页器只布局一次的关
+		dataRender();
+
+		saleIndex=9;
+		styleIndex=9;
+		materialIndex=9;
+		priceIndex=9;
+		$('.tab-bar-con li').each(function(index,item){console.log(1111);
+			$(item).removeClass('active');
 		});
+		$(aOlLi[0]).find('span').html('人气');
+		$(aOlLi[1]).find('span').html('款式');
+		$(aOlLi[2]).find('span').html('材质');
+		$(aOlLi[3]).find('span').html('价格范围');
+	});
+});
+var vipNo=getSto('vipNo');
+if(vipNo){//登录
+    //添加搜索记录
+    
+    $(oSearchBtn).on('click',function(ev){
+        var val=oInput.val();
+        var vipNo=getSto('vipNo');
+        var token=getSto('token');
+        if(val!=''){
+        	//添加历史记录
+            $.ajax({
+                type:'get',
+                headers:signName(md5,vipNo,token),
+                url:apiUrl+'/user/search/add',
+                data:{
+                    memberNo:vipNo,
+                    searchContent:val,
+                    businessCase:2
+                },
+                success:function(data){
+                    
+                    if(data.head.code){
 
-		//显示搜索记录
-		var str='';
-		$.ajax({
-			url:apiUrl+'/user/search/get?memberNo='+vipNo+'&businessCase=1',
-			headers:signName(md5,vipNo,token),
-			success:function(data){
-				if(data.head.code){
+                        if(data.head.code==71982){
+                            rmSto('nickname');
+                            rmSto('timestamp');
+                            rmSto('token');
+                            rmSto('vipNo');
+                            alert('出现错误，请重新登录！');
+                            location.href='personal-orders.html';
+                        }
+                        alert(data.head.message);
+                        return;
+                    }
 
-                	if(data.head.code==71982){
-	                    rmSto('nickname');
-	                    rmSto('timestamp');
-	                    rmSto('token');
-	                    rmSto('vipNo');
-	                    alert('出现错误，请重新登录！');
-	                    location.href='user-center.html';
-	                }
+        			keyVal=val;
+        			targetId=[];
+					labelId=[];
+					sortId=[];
+					styleId=[];
+					materialId=[];
+					priceId=[];
+        			jsonData={
+        				type:1,
+				        pageNum:pageNum,
+				        pageSize:pageSize,
+				        keyWord:val
+				    };
+					iBtn=true;//控制分页器只布局一次的关
+					dataRender();
+
+					saleIndex=9;
+					styleIndex=9;
+					materialIndex=9;
+					priceIndex=9;
+					$('.tab-bar-con li').each(function(index,item){
+						$(item).removeClass('active');
+					});
+					$(aOlLi[0]).find('span').html('人气');
+					$(aOlLi[1]).find('span').html('款式');
+					$(aOlLi[2]).find('span').html('材质');
+					$(aOlLi[3]).find('span').html('价格范围');
+                    //window.location.href=encodeURI(encodeURI('goods-search-result.html?keyword='+val));
+                },
+                error:function(err){
+                    console.log(err);
+                },
+            });
+            
+        }else{
+            alert('搜索内容不能为空');
+        } 
+    });
+
+    oInput.on('focus',function(ev){
+    	var vipNo=getSto('vipNo');
+        var str='';
+        $.ajax({
+            type:'get',
+            headers:signName(md5,vipNo,getSto('token')),
+            url:apiUrl+'/user/search/get',
+            data:{
+                memberNo:vipNo,
+                businessCase:2
+            },
+            success:function(data){
+                if(data.head.code){
+                    cancelImgLayer();
+                    if(data.head.code==71982){
+                        rmSto('nickname');
+                        rmSto('timestamp');
+                        rmSto('token');
+                        rmSto('vipNo');
+                        alert('出现错误，请重新登录！');
+                        location.href='user-center.html';
+                    }
                     alert(data.head.message);
-                    return;
                 }
-				var arr=data.body.searchs;
-				
-				arr.forEach(function(item,index){
-					str+='<li>';
-					str+='<i></i><span>'+item.searchContent+'</span><a id='+item.id+' href="javascript:;"></a>';
-			        str+='</li>';
-				});
-				oUl.html(str);
 
-				var aImg=$('.show-pic');
-				imgPos(aImg);
+                var arr=data.body.searchs;
+            
+                arr.forEach(function(item,index){
+                    str+='<li>';
+                    str+='<i></i><span>'+item.searchContent+'</span><a id='+item.id+' href="javascript:;"></a>';
+                    str+='</li>';
+                });
+                oUl.html(str);
+              
+                $('.goods-history').css('display','block');
 
-				//点击搜索结果
-				(function(){
-					var aLi=$('.history>ul>li');
+                //点击搜索结果
+                (function(){
+                    var aLi=$('.goods-history>ul>li');
 
-					aLi.forEach(function(item,index){
-						$(item).on('click',function(){
-							window.location.href=encodeURI(encodeURI('search-result.html?keyword='+$(item).find('span').text()));
-						});
-					});
-				})();
+                    aLi.each(function(index,item){
+                        $(item).on('click',function(ev){
+                        	keyVal=$(item).find('span').text();
+		        			targetId=[];
+							labelId=[];
+							sortId=[];
+							styleId=[];
+							materialId=[];
+							priceId=[];
+		        			jsonData={
+		        				type:1,
+						        pageNum:pageNum,
+						        pageSize:pageSize,
+						        keyWord:$(item).find('span').text()
+						    };
+						    getUrl=apiUrl+'/search/result/queryGoodsBykeyWordAndPage';
+							iBtn=true;//控制分页器只布局一次的关
+							dataRender();
 
-				//如果搜索记录为小于2条时不显示“展开全部”和“清除历史记录”
-				if($('.history ul>li').length<=2){
-					$('.show-all').css('display','none');
-				}
+							saleIndex=9;
+							styleIndex=9;
+							materialIndex=9;
+							priceIndex=9;
+							$('.tab-bar-con li').each(function(index,item){console.log(1111);
+								$(item).removeClass('active');
+							});
+							$(aOlLi[0]).find('span').html('人气');
+							$(aOlLi[1]).find('span').html('款式');
+							$(aOlLi[2]).find('span').html('材质');
+							$(aOlLi[3]).find('span').html('价格范围');
+							$('.goods-history').css('display','none');
+                            //window.location.href=encodeURI(encodeURI('goods-search-result.html?keyword='+$(item).find('span').text()));
+                            ev.stopPropagation();
+                        });
+                    });
+                })();
 
-				//如果搜索记录为0时不显示“展开全部”和“清除历史记录”
-				if($('.history ul>li').length==0){
-					$('.clear-record').css('display','none');
-				}
+                //如果搜索记录为小于2条时不显示“展开全部”和“清除历史记录”
+                if($('.goods-history ul>li').length<=2){
+                    $('.show-all').css('display','none');
+                }
 
-				//如果搜索记录条数大于0，显示“清除历史记录”
-				if($('.history ul>li').length>0){
-					$('.clear-record').css('display','block');
-				}
+                //如果搜索记录为0时不显示“展开全部”和“清除历史记录”
+                if($('.goods-history ul>li').length==0){
+                    $('.clear-record').css('display','none');
+                }
 
-				//如果搜索记录条数大于2，显示“全部展示”
-				if($('.history ul>li').length>2){
-					oUl.height('.72rem');
-					$('.show-all').css('display','block');
-					$('.clear-record').css('display','none');
-				}
+                //如果搜索记录条数大于0，显示“清除历史记录”
+                if($('.goods-history ul>li').length>0){
+                    $('.clear-record').css('display','block');
+                }
 
-				//展开全部
-				$('.show-all').on('click',function(){
-					var h=$('.history ul>li').length*$('.history ul>li').eq(0).height();
-					$(this).css('display','none');
-					oUl.css('height',h);
-					$('.clear-record').css('display','block');
-					setTimeout(function(){
-						oUl.css('height','auto');
-					},300);
-				});
-				
-				//清除历史记录
-				$('.clear-record').on('click',function(){
-					$.ajax({
-						url:apiUrl+'/user/search/delete?searchId=0'+'&memberNo='+vipNo+'&businessCase=1',
-						headers:signName(md5,vipNo,token),
-						success:function(data){
-							if(data.head.code){
+                //如果搜索记录条数大于2，显示“全部展示”
+                if($('.goods-history ul>li').length>2){
+                    oUl.height('72px');
+                    $('.show-all').css('display','block');
+                    $('.clear-record').css('display','none');
+                }
 
-	                        	if(data.head.code==71982){
-				                    rmSto('nickname');
-				                    rmSto('timestamp');
-				                    rmSto('token');
-				                    rmSto('vipNo');
-				                    alert('出现错误，请重新登录！');
-				                    location.href='user-center.html';
-				                }
-	                            alert(data.head.message);
-	                            return;
-	                        }
-							if(data.body.status){
-								$('.history ul>li').remove();//删除全部列表项
-								$('.show-all').css('display','none');
-								$('.clear-record').css('display','none');
-								oUl.height('auto');
-							}
-						},
-						error:function(err){
-							console.log(err);
-						}
-					});
-					
-				});
+                //展开全部
+                $('.show-all').on('click',function(ev){
+                    ev.stopPropagation();
 
-				//删除项
-				var aDel=$('.history ul>li>a');
-				aDel.forEach(function(item,index){
-					$(item).on('click',function(ev){
-						$.ajax({
-							url:apiUrl+'/user/search/delete?searchId='+item.id+'&memberNo='+vipNo+'&businessCase=1',
-							headers:signName(md5,vipNo,token),
-							success:function(data){
-								if(data.head.code){
+                    var h=$('.goods-history ul>li').length*$('.goods-history ul>li').eq(0).height();
+                    $(this).css('display','none');
+                    oUl.css('height',h);
+                    $('.clear-record').css('display','block');
+                    setTimeout(function(){
+                        oUl.css('height','auto');
+                    },300);
+                });
+                
+                //清除历史记录
+                $('.clear-record').on('click',function(ev){
+                    ev.stopPropagation();
+                    var token=getSto('token');
+                    $.ajax({
+                        type:'get',
+                        url:apiUrl+'/user/search/delete',
+                        data:{
+                            memberNo:vipNo,
+                            searchId:0,
+                            businessCase:2
+                        },
+                        headers:signName(md5,vipNo,token),
+                        success:function(data){
+                            if(data.head.code){
 
-		                        	if(data.head.code==71982){
-					                    rmSto('nickname');
-					                    rmSto('timestamp');
-					                    rmSto('token');
-					                    rmSto('vipNo');
-					                    alert('出现错误，请重新登录！');
-					                    location.href='user-center.html';
-					                }
-		                            alert(data.head.message);
-		                            return;
-		                        }
-								if(data.body.status){
-									$(item).parent().remove();//删除元素节点
-									if($('.history>ul>li').length<=2){
-										$('.show-all').css('display','none');
-										oUl.css('height','auto');
-									}
-									if($('.history>ul>li').length==0){
-										$('.clear-record').css('display','none');
-									}
-								}
-							},
-							error:function(err){
-								console.log(err);
-							}
-						});
-						ev.stopPropagation();
-					});
-				});
-			},
-			error:function(err){
-				console.log(err);
-				$('.clear-record').css('display','none');
-				$('.show-all').css('display','none');
-			}
-		});
-	}else{//未登录
-		var aSearchRecord;
-		oInput.focus();
-		showRecord();
+                                if(data.head.code==71982){
+                                    rmSto('nickname');
+                                    rmSto('timestamp');
+                                    rmSto('token');
+                                    rmSto('vipNo');
+                                    alert('出现错误，请重新登录！');
+                                    location.href='user-center.html';
+                                }
+                                alert(data.head.message);
+                                return;
+                            }
+                            if(data.body.status){
+                                $('.goods-history ul>li').remove();//删除全部列表项
+                                $('.show-all').css('display','none');
+                                $('.clear-record').css('display','none');
+                                oUl.height('auto');
+                            }
+                        },
+                        error:function(err){
+                            console.log(err);
+                        }
+                    });
+                    
+                });
 
-		oInput.on('focus',function(){
-			
-			aSearchRecord=JSON.parse(localStorage.getItem('searchRecord'));//获取搜索记录
-			showRecord();
-		});
+                //删除项
+                var aDel=$('.goods-history ul>li>a');
+                aDel.each(function(index,item){
+                    $(item).on('click',function(ev){
+                        ev.stopPropagation();
+                        var token=getSto('token');
+                        $.ajax({
+                            type:'get',
+                            url:apiUrl+'/user/search/delete',
+                            data:{
+                                memberNo:vipNo,
+                                searchId:item.id,
+                                businessCase:2
+                            },
+                            headers:signName(md5,vipNo,token),
+                            success:function(data){
+                                if(data.head.code){
 
-		$(oSearchBtn).on('click',function(ev){
-			
-				var val=oInput.val();
-				if(classof(aSearchRecord)=='Null'){
-					aSearchRecord=[];
-				}
-				if(val!=''){
-					aSearchRecord.push(val);
-					aSearchRecord=noRepeat(aSearchRecord);//去重
-					localStorage.setItem('searchRecord',JSON.stringify(aSearchRecord));//存储搜索记录
-					window.location.href=encodeURI(encodeURI('search-result.html?keyword='+val));
-				}
-				
-			
-		});
+                                    if(data.head.code==71982){
+                                        rmSto('nickname');
+                                        rmSto('timestamp');
+                                        rmSto('token');
+                                        rmSto('vipNo');
+                                        alert('出现错误，请重新登录！');
+                                        location.href='user-center.html';
+                                    }
+                                    alert(data.head.message);
+                                    return;
+                                }
+                                if(data.body.status){
+                                    $(item).parent().remove();//删除元素节点
+                                    if($('.goods-history>ul>li').length<=2){
+                                        $('.show-all').css('display','none');
+                                        oUl.css('height','auto');
+                                    }
+                                    if($('.goods-history>ul>li').length==0){
+                                        $('.clear-record').css('display','none');
+                                    }
+                                }
+                            },
+                            error:function(err){
+                                console.log(err);
+                            }
+                        });
+                    });
+                });
+            },
+            error:function(){
 
-		//展示搜索记录列表
-		function showRecord(){
-			aSearchRecord=JSON.parse(localStorage.getItem('searchRecord'));//获取搜索记录
-			if(aSearchRecord){
-				createRecordList(aSearchRecord);
-			}
-		}
+            }
+        });//获取搜索记录
+        //showRecord();
+        ev.stopPropagation();
+    });
 
-		//生成搜索记录列表
-		function createRecordList(arr){
-			var str='';
-			arr.forEach(function(item,index){
-				str+='<li>';
-				str+='<i></i><span>'+item+'</span><a href="javascript:;"></a>';
-		        str+='</li>';
-			});
-			oUl.html(str);
+    //location.href='goods-search-result.html?';
+}else{//未登录
+    var aSearchRecord;
+    //oInput.focus();
+    //showRecord();
+    oInput.on('focus',function(ev){
+        
+        aSearchRecord=JSON.parse(getLto('goodsSearchRecord'));//获取搜索记录
+        showRecord();
+        ev.stopPropagation();
+    });
 
-			//点击搜索结果
-			(function(){
-				var aLi=$('.history>ul>li');
-				
-				aLi.forEach(function(item,index){
-					$(item).on('click',function(){
-						window.location.href=encodeURI(encodeURI('search-result.html?keyword='+$(item).find('span').text()));
-					});
-				});
-			})();
+    $(oSearchBtn).on('click',function(){
+        
+        var val=oInput.val();
+        if(!aSearchRecord){
+            aSearchRecord=[];
+        }
+        if(val!=''){
+            aSearchRecord.push(val);
+            aSearchRecord=noRepeat(aSearchRecord);//去重
+            
+            setLto('goodsSearchRecord',JSON.stringify(aSearchRecord));//存储搜索记录
+            
+            if(val!=''){
+                keyVal=val;
+                targetId=[];
+                labelId=[];
+                sortId=[];
+                styleId=[];
+                materialId=[];
+                priceId=[];
+                pageNum=1;
+                jsonData={
+                    type:1,
+                    pageNum:pageNum,
+                    pageSize:pageSize,
+                    keyWord:val
+                };
+                iBtn=true;//控制分页器只布局一次的关
+                dataRender();
 
-			//如果搜索记录条数大于0，显示“清除历史记录”
-			if($('.history ul>li').length>0){
-				$('.clear-record').css('display','block');
-			}
-			//如果搜索记录条数大于2，显示“全部展示”
-			if($('.history ul>li').length>2){
-				oUl.height('.72rem');
-				$('.show-all').css('display','block');
-				$('.clear-record').css('display','none');
-			}
-			del();
-		}
+                saleIndex=9;
+                styleIndex=9;
+                materialIndex=9;
+                priceIndex=9;
+                $('.tab-bar-con li').each(function(index,item){console.log(1111);
+                    $(item).removeClass('active');
+                });
+                $(aOlLi[0]).find('span').html('人气');
+                $(aOlLi[1]).find('span').html('款式');
+                $(aOlLi[2]).find('span').html('材质');
+                $(aOlLi[3]).find('span').html('价格范围');
+                
+            }else{
+                alert('搜索内容不能为空');
+            }
+            //window.location.href=encodeURI(encodeURI('goods-search-result.html?keyword='+val));
+        }
+    });
 
-		//删除搜索记录
-		function del(){
-			var aDel=$('.history ul>li>a');
-			aDel.forEach(function(item,index){
-				$(item).on('click',function(ev){
-					$(this).parent().remove();//删除元素节点
-					var val=$(this).parent().text();
-					aSearchRecord.splice($.inArray(val,aSearchRecord),1);//从数组中删除搜索记录
-					if(aSearchRecord.length<=2){
-						$('.show-all').css('display','none');
-						oUl.css('height','auto');
-					}
-					if(aSearchRecord.length==0){
-						$('.clear-record').css('display','none');
-					}
-					localStorage.removeItem('searchRecord');//删除localStorage的全部搜索记录
-					localStorage.setItem('searchRecord',JSON.stringify(aSearchRecord));//重新添加删除后剩余的搜索记录到localStorage
-					ev.stopPropagation();
-				});
-			});
-		}
+    //展示搜索记录列表
+    function showRecord(){
+        aSearchRecord=JSON.parse(getLto('goodsSearchRecord'));//获取搜索记录
+        if(aSearchRecord){
+            createRecordList(aSearchRecord);
+        }
+    }
 
-		//如果搜索记录为小于2条时不显示“展开全部”和“清除历史记录”
-		if($('.history ul>li').length<=2){
-			$('.show-all').css('display','none');
-		}
+    //生成搜索记录列表
+    function createRecordList(arr){
+        var str='';
+        arr.forEach(function(item,index){
+            str+='<li>';
+            str+='<i></i><span>'+item+'</span><a href="javascript:;"></a>';
+            str+='</li>';
+        });
+        oUl.html(str);
+        $('.goods-history').css('display','block');
+        //点击搜索结果
+        (function(){
+            var aLi=$('.goods-history>ul>li');
+            
+            aLi.each(function(index,item){
+                $(item).on('click',function(){
+                    //window.location.href=encodeURI(encodeURI('goods-search-result.html?keyword='+$(item).find('span').text()));
+                    keyVal=$(item).find('span').text();
+                    targetId=[];
+                    labelId=[];
+                    sortId=[];
+                    styleId=[];
+                    materialId=[];
+                    priceId=[];
+                    pageNum=1;
+                    jsonData={
+                        type:1,
+                        pageNum:pageNum,
+                        pageSize:pageSize,
+                        keyWord:$(item).find('span').text()
+                    };
+                    iBtn=true;//控制分页器只布局一次的关
+                    dataRender();
 
-		//如果搜索记录为0时不显示“展开全部”和“清除历史记录”
-		if($('.history ul>li').length==0){
-			$('.clear-record').css('display','none');
-		}
+                    saleIndex=9;
+                    styleIndex=9;
+                    materialIndex=9;
+                    priceIndex=9;
+                    $('.tab-bar-con li').each(function(index,item){
+                        $(item).removeClass('active');
+                    });
+                    $(aOlLi[0]).find('span').html('人气');
+                    $(aOlLi[1]).find('span').html('款式');
+                    $(aOlLi[2]).find('span').html('材质');
+                    $(aOlLi[3]).find('span').html('价格范围');
+                });
+            });
+        })();
 
-		//展开全部
-		$('.show-all').on('click',function(){
-			var h=$('.history ul>li').length*$('.history ul>li').eq(0).height();
-			$(this).css('display','none');
-			oUl.css('height',h);
-			$('.clear-record').css('display','block');
-			setTimeout(function(){
-				oUl.css('height','auto');
-			},300);
-		});
-		
-		//清除历史记录
-		$('.clear-record').on('click',function(){
-			aSearchRecord=[];//搜索数组清空
-			$('.history ul>li').remove();//删除全部列表项
-			localStorage.removeItem('searchRecord');//删除localStorage的全部搜索记录
-			$('.show-all').css('display','none');
-			$(this).css('display','none');
-			oUl.height('auto');
-		});
-	}
-})();
+        //如果搜索记录条数大于0，显示“清除历史记录”
+        if($('.goods-history ul>li').length>0){
+            $('.clear-record').css('display','block');
+        }
+        //如果搜索记录条数大于2，显示“全部展示”
+        if($('.goods-history ul>li').length>2){
+            oUl.height('72px');
+            $('.show-all').css('display','block');
+            $('.clear-record').css('display','none');
+        }
+        del();
+    }
 
-//热门搜索//////////////////////////////////////////////////////////////////////////////////
-(function(){
-	var hotLabels=[{"id":1,"name":"推荐"},{"id":2,"name":"亲子"},{"id":2,"name":"亲子"},{"id":2,"name":"亲子"},{"id":2,"name":"亲子"}];
+    //删除搜索记录
+    function del(){
+        var aDel=$('.goods-history ul>li>a');
+        aDel.each(function(index,item){
+            $(item).on('click',function(ev){alert(1);
+                $(this).parent().remove();//删除元素节点
+                var val=$(this).parent().text();
+                aSearchRecord.splice($.inArray(val,aSearchRecord),1);//从数组中删除搜索记录
+                if(aSearchRecord.length<=2){
+                    $('.show-all').css('display','none');
+                    oUl.css('height','auto');
+                }
+                if(aSearchRecord.length==0){
+                    $('.clear-record').css('display','none');
+                }
+                rmLto('goodsSearchRecord');//删除localStorage的全部搜索记录
+                setLto('goodsSearchRecord',JSON.stringify(aSearchRecord));//重新添加删除后剩余的搜索记录到localStorage
+                ev.stopPropagation();
+            });
+        });
+    }
+
+    //如果搜索记录为小于2条时不显示“展开全部”和“清除历史记录”
+    if($('.goods-history ul>li').length<=2){
+        $('.show-all').css('display','none');
+    }
+
+    //如果搜索记录为0时不显示“展开全部”和“清除历史记录”
+    if($('.goods-history ul>li').length==0){
+        $('.clear-record').css('display','none');
+    }
+
+    //展开全部
+    $('.show-all').on('click',function(ev){
+        ev.stopPropagation();
+        var h=$('.goods-history ul>li').length*$('.goods-history ul>li').eq(0).height();
+        $(this).css('display','none');
+        oUl.css('height',h);
+        $('.clear-record').css('display','block');
+        setTimeout(function(){
+            oUl.css('height','auto');
+        },300);
+    });
+    
+    //清除历史记录
+    $('.clear-record').on('click',function(){
+        aSearchRecord=[];//搜索数组清空
+        $('.goods-history ul>li').remove();//删除全部列表项
+        localStorage.removeItem('goodsSearchRecord');//删除localStorage的全部搜索记录
+        $('.show-all').css('display','none');
+        $(this).css('display','none');
+        oUl.height('auto');
+    });
+}
+////////////////////////////////////初始化商品列表////////////////////////////////////
+
+var oCon=$('.guess-like-public ul');
+
+dataRender();
+
+function dataRender(){
 	var str='';
-	hotLabels.forEach(function(item,index){
-		str+='<li>'+item['name']+'</li>';
-	});
-	$('.hot>ul').html(str);
-})();
+    $.ajax({
+        type:'get',
+        url:getUrl,
+        data:jsonData,
+        success:function(data){
+            if(data.head.code){
+                console.log(data.head.message);
+            }
+            
+            var data=data.body;
 
-//推荐文章//////////////////////////////////////////////////////////////////////////////////
-(function(){
-	var arr=[
-		{	
-			id:0,
-			publishTime:'2017-02-28',
-			cover:require('../imgs/000.jpg'),
-			title:'漂亮妈妈如何持家？',
-			labels:'乐活'
-		},
-		{	
-			id:0,
-			publishTime:'2017-02-28',
-			cover:require('../imgs/1.jpg'),
-			title:'漂亮妈妈如何持家？',
-			labels:'乐活'
-		},
-		{	
-			id:0,
-			publishTime:'2017-02-28',
-			cover:require('../imgs/2.jpg'),
-			title:'漂亮妈妈如何持家？',
-			labels:'乐活'
-		},
-		{	
-			id:0,
-			publishTime:'2017-02-28',
-			cover:require('../imgs/3.jpg'),
-			title:'漂亮妈妈如何持家？',
-			labels:'乐活'
-		},
-		{	
-			id:0,
-			publishTime:'2017-02-28',
-			cover:require('../imgs/000.jpg'),
-			title:'漂亮妈妈如何持家？',
-			labels:'乐活'
-		}
-	];
-	var str='';
-	arr.forEach(function(item,index){
-		str+='<li class="item"><section class="block">';
-		str+='<img class="show-pic" src="'+item.cover+'" >';
-		str+='<h2 class="title">'+item.title+'</h2>';
-		str+='<div class="item-foot"><span class="time">'+item.publishTime+'</span><em class="kind">'+item.labels+'</em></div>';
-		str+='</section></li>';
-	});
-	$('.recomand-article>ul').html(str);
-})();
-
-function imgPos(aImg){
-	aImg.forEach(function(item,index){
-		var iW='';
-		var iH='';
-		var iHeight=$('.recomand li.item>section.block div.img-wrap').height();
-		var iWidth=$('.recomand li.item>section.block div.img-wrap').width();
-
-		$(item).get(0).onload=function(){
-			iW=$(item).get(0).offsetWidth;
-			iH=$(item).get(0).offsetHeight;
-			
-			if(iW/iH>1.675){
-				$(item).css({
-					'height':iHeight,
-					'left':'50%',
-					'margin-left':-iW*iHeight/iH/2
-				});
-			}else{
-				$(item).css({
-					'width':iWidth,
-					'top':'50%',
-					'margin-top':-iH*iWidth/iW/2
-				});
+            data.goodsVoList.forEach(function(item,index){
+	            str+=`<li class="goods-gife-item-public">`;
+	            str+=`<div><img src="" alt="" data-src=${item.goodsPicture}>
+	                    <p>${item.shortName}</p>
+	                    <em>￥${item.salePrice}</em>
+	                </div>
+	                <a href=product-details.html?id=${item.id}></a>`;
+	            str+=`</li>`;
+	        });
+	        $(oCon).html(str);
+	        //图片懒加载
+	        (function(){
+	            var aImg=$('.guess-like-public img');
+	            imgLazy(aImg);
+	        })();
+	        console.log('data.page:',data.page/pageSize);
+			var pageCount=Math.ceil(data.page/pageSize);
+			// 分页器
+			if(iBtn){
+				pagingRenderDom(pageCount);
+				iBtn=false;
 			}
-		};
-	});
+            
+        },
+        error:function(err){
+        	console.log(err);
+        }
+    });
 }
 
-//判断数据类型
-function classof(obj){
-	if(obj===null){
-		return 'Null';
+function pagingRenderDom(num){
+	var pagingCon=$('.paging');
+	var str='';
+	var curIndex=0;//当前选中的index
+	if(num==1){
+		$('.paging').css('display','none');
+	}else{
+        $('.paging').css('display','block');
+    }
+
+	if(num<9){//如果小于9页
+
+		//以下是布局
+		str+=`<span class="to-prev"></span><ul class="page-wrap">`;
+		for(var i=0; i<num; i++){
+			if(i==curIndex){
+				str+='<li class="active">'+(i+1)+'</li>';
+			}else{
+				str+='<li>'+(i+1)+'</li>';
+			}
+		}		
+		str+=`</ul><span class="to-next"></span>`;
+		pagingCon.html(str);
+
+		//以下是点击效果及逻辑
+		var oPrev=$('.to-prev');//左按键
+		var oNext=$('.to-next');//右按键
+		var aBtn=$('.page-wrap li');//每一项
+
+		//点击每项
+		for(var i=0; i<aBtn.length; i++){
+			(function(index){
+				$(aBtn[index]).on('click',function(){
+					aBtn[curIndex].className='';
+					curIndex=index;
+					jsonData.pageNum=index+1;
+					dataRender();
+					$(this).get(0).className='active';
+				});
+			})(i);
+		}
+
+		//向前
+		oPrev.on('click',function(){
+			if(curIndex==0) return;//如果当前是第一页 则不往下继续
+			aBtn[curIndex].className='';
+			curIndex--;
+			jsonData.pageNum=curIndex+1;
+			dataRender();
+			aBtn[curIndex].className='active';
+		});
+
+		//向后
+		oNext.on('click',function(){
+			if(curIndex==(num-1)) return;//如果当前是最后一页 则不往下继续
+			aBtn[curIndex].className='';
+			curIndex++;
+			jsonData.pageNum=curIndex+1;
+			dataRender();
+			aBtn[curIndex].className='active';
+		});
+		
+	}else{//如果大于等于9页
+		renderPage('init',0);
 	}
-	if(obj===undefined){
-		return 'Undefined';
+
+	//分页器布局
+	function renderPage(isClass,Index){
+		var str='';
+		if(isClass=='init'){//初始显示
+			str+=`<ul class="page-wrap">`;
+			for(var i=0; i<num; i++){
+				if(i<3){
+					if(i==0){
+						str+='<li class="active">'+(i+1)+'</li>';
+					}else{
+						str+='<li>'+(i+1)+'</li>';
+					}
+				}else if(i>=3&&i<=num-2){
+					str+='<li class="dot">...</li>';
+				}else{
+					str+='<li>'+(i+1)+'</li>';
+				}
+			}		
+			str+=`</ul><span class="to-next"></span>`;
+			pagingCon.html(str);
+			
+		}else if(isClass=='second'){
+			str+=`<span class="to-prev"></span><ul class="page-wrap">`;
+			for(var i=0; i<num; i++){
+				if(i<3){
+					str+='<li>'+(i+1)+'</li>';
+				}else if(i>=3&&i<=num-2){
+					str+='<li class="dot">...</li>';
+				}else{
+					str+='<li>'+(i+1)+'</li>';
+				}
+			}		
+			str+=`</ul><span class="to-next"></span>`;
+			pagingCon.html(str);
+			
+		}else if(isClass=='third'){
+			str+=`<span class="to-prev"></span><ul class="page-wrap">`;
+			for(var i=0; i<num; i++){
+				if(i<4){
+					str+='<li>'+(i+1)+'</li>';
+				}else if(i>=4&&i<=num-2){
+					str+='<li class="dot">...</li>';
+				}else{
+					str+='<li>'+(i+1)+'</li>';
+				}
+			}		
+			str+=`</ul><span class="to-next"></span>`;
+			pagingCon.html(str);
+			
+		}else if(isClass=='fourth'){
+			str+=`<span class="to-prev"></span><ul class="page-wrap">`;
+			for(var i=0; i<num; i++){
+				if(i<5){
+					str+='<li>'+(i+1)+'</li>';
+				}else if(i>=5&&i<=num-2){
+					str+='<li class="dot">...</li>';
+				}else{
+					str+='<li>'+(i+1)+'</li>';
+				}
+			}		
+			str+=`</ul><span class="to-next"></span>`;
+			pagingCon.html(str);
+			
+		}else if(isClass=='middle'){
+			var mid=Math.ceil((num/2));
+			var n=Index-mid;
+			n++;
+			str+=`<span class="to-prev"></span><ul class="page-wrap">`;
+			for(var i=0; i<num; i++){
+				if(i<1){
+					str+='<li>'+(i+1)+'</li>';
+				}else if(i>=1&&i<mid-2+n){
+					str+='<li class="dot">...</li>';
+				}else if(i>=mid-2+n&&i<mid+1+n){
+					str+='<li>'+(i+1)+'</li>';
+				}else if(i>=mid+1+n&&i<num-1){
+					str+='<li class="dot2">...</li>';
+				}else{
+					str+='<li>'+(i+1)+'</li>';
+				}
+			}		
+			str+=`</ul><span class="to-next"></span>`;
+			pagingCon.html(str);
+			
+		}else if(isClass=='last-4'){
+			var mid=Math.ceil((num/2));
+			str+=`<span class="to-prev"></span><ul class="page-wrap">`;
+			for(var i=0; i<num; i++){
+				if(i>=1&&i<num-5){
+					str+='<li class="dot">...</li>';
+				}else{
+					str+='<li>'+(i+1)+'</li>';
+				}
+			}		
+			str+=`</ul><span class="to-next"></span>`;
+			pagingCon.html(str);
+			
+		}else if(isClass=='last-3'){
+			var mid=Math.ceil((num/2));
+			str+=`<span class="to-prev"></span><ul class="page-wrap">`;
+			for(var i=0; i<num; i++){
+				if(i>=1&&i<num-4){
+					str+='<li class="dot">...</li>';
+				}else{
+					str+='<li>'+(i+1)+'</li>';
+				}
+			}		
+			str+=`</ul><span class="to-next"></span>`;
+			pagingCon.html(str);
+			
+		}else if(isClass=='last-2'){
+			var mid=Math.ceil((num/2));
+			str+=`<span class="to-prev"></span><ul class="page-wrap">`;
+			for(var i=0; i<num; i++){
+				if(i>=1&&i<num-3){
+					str+='<li class="dot">...</li>';
+				}else{
+					str+='<li>'+(i+1)+'</li>';
+				}
+			}		
+			str+=`</ul><span class="to-next"></span>`;
+			pagingCon.html(str);
+			
+		}else if(isClass=='last-1'){
+			var mid=Math.ceil((num/2));
+			str+=`<span class="to-prev"></span><ul class="page-wrap">`;
+			for(var i=0; i<num; i++){
+				if(i>=1&&i<num-3){
+					str+='<li class="dot">...</li>';
+				}else{
+					str+='<li>'+(i+1)+'</li>';
+				}
+			}		
+			str+=`</ul>`;
+			pagingCon.html(str);
+			
+		}
+		var oPrev=$('.to-prev');//左按键
+		var oNext=$('.to-next');//右按键
+		var aBtn=$('.page-wrap li');//每一项
+		var len=aBtn.length;
+
+		//隐藏多余的...
+		$('.dot').each(function(index,item){
+			if(index>0){
+				$(item).css('display','none');
+			}
+		});
+		$('.dot2').each(function(index,item){
+			if(index>0){
+				$(item).css('display','none');
+			}
+		});
+
+		//选中项的标识
+		if(isClass!='init'){
+			$(aBtn[curIndex]).removeClass('active');
+		}
+		$(aBtn[Index]).addClass('active');
+		curIndex=Index;
+
+		//点击每项的重新布局
+		$(aBtn).each(function(index,item){
+			$(item).on('click',function(){
+				getNumToRender(index);
+				jsonData.pageNum=index+1;
+				dataRender();
+			});
+		});
+
+		//向前
+		oPrev.on('click',function(){
+			curIndex--;
+			getNumToRender(curIndex);
+			jsonData.pageNum=curIndex+1;
+			dataRender();
+		});
+
+		//向后
+		oNext.on('click',function(){
+			curIndex++;
+			getNumToRender(curIndex);
+			jsonData.pageNum=curIndex+1;
+			dataRender(curIndex+1);
+		});
+
+		//获取当前页数重新布局
+		function getNumToRender(num){
+			if(num==0){
+				renderPage('init',num);
+			}else if(num==1){
+				renderPage('second',num);
+			}else if(num==2){
+				renderPage('third',num);
+			}else if(num==3){
+				renderPage('fourth',num);
+			}else if(num>3&&num<len-4){
+				renderPage('middle',num);
+			}else if(num==len-4){
+				renderPage('last-4',num);
+			}else if(num==len-3){
+				renderPage('last-3',num);
+			}else if(num==len-2){
+				renderPage('last-2',num);
+			}else if(num==len-1){
+				renderPage('last-1',num);
+			}
+		}
 	}
-	return Object.prototype.toString.call(obj).slice(8,-1);
 }
