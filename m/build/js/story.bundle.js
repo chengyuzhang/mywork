@@ -1,0 +1,1 @@
+webpackJsonp([11],{0:function(e,t,r){e.exports=r(60)},60:function(e,t,r){"use strict";function a(e){return e&&e.__esModule?e:{default:e}}r(2),r(103);var n=r(3),c=a(n),u=r(1);a(u),!function(){switch((0,u.url_search)().from){case"index":(0,c.default)("header a").attr("href","index.html");break;case"center":(0,c.default)("header a").attr("href","user-center.html")}}()},103:2});

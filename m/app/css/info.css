@@ -1,0 +1,143 @@
+
+.wrap{
+	position: absolute;
+	top: .54rem;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.list{
+	margin-top: .2rem;
+	padding: 0 .2rem;
+}
+.list>li{
+	position: relative;
+	width: 100%;
+	height: .46rem;
+	line-height: .46rem;
+	overflow: hidden;
+	border-bottom: 1px solid #DDDDDD;
+}
+.list>li>*{
+	float: left;
+}
+.list>li>i{
+	margin-right: .2rem;
+	float: right;
+	color: #333;
+	font-size: .14rem;
+	/*margin-top: .1rem;
+	margin-right: .1rem;
+	width: .22rem;
+	height: .22rem;*/
+}
+.list>li>i>img{
+	margin-bottom: .04rem;
+	width: .38rem;
+	height: .38rem;
+	border-radius: 50%;
+}
+.list>li>p{
+	font-size: .14rem;
+	color: #333;
+}
+.list>li>em{
+	float: right;
+	margin-top: .16rem;
+	width: .08rem;
+	height: .14rem;
+	background: url(../imgs/arrow-r2.png) no-repeat;
+	background-size: contain;
+}
+.list>li>input{
+	position: absolute;
+	left: 0;
+	top: 0;
+	margin-top: .11rem;
+	padding-right: .28rem;
+	width: 100%;
+	height: .2rem;
+	line-height: .14rem;
+	text-align: right;
+	color: #222;
+	font-size: .14rem;
+}
+.list>li>input.upload{
+	opacity: 0;
+}
+
+.opacity{
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,.4);
+	opacity: 0;
+	display: none;
+	transition: all .5s;
+}
+.opacity>.wrap{
+	position: absolute;
+	top: 2.12rem;
+	width: 3.55rem;
+	height: .9rem;
+	left: .1rem;
+	background: rgba(255,255,255,1);
+	border-radius: 6px;
+}
+.opacity>.wrap>h2{
+	height: .5rem;
+	line-height: .5rem;
+	text-align: center;
+	font-size: .14rem;
+	color: #666;
+	border-bottom: 1px solid #999;
+}
+.opacity>.wrap>ul{}
+.opacity>.wrap>ul>li{
+	float: left;
+	width: 50%;
+	line-height: .4rem;
+	text-align: center;
+	color: #666;
+	font-size: .14rem;
+}
+.opacity>.wrap>ul>li:first-of-type{
+	border-right: 1px solid #999;
+}
+
+.circle{
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	z-index: 3;
+	background: rgba(0,0,0,.5);
+	display: none;
+	opacity: 0;
+	transition: all .5s;
+}
+.circle>p{
+	position: absolute;
+	top: 50%;
+	margin-top: -.5rem;
+	left: 0;
+	width: 100%;
+	text-align: center;
+	color: #fff;
+}
+.circle>span{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -.2rem 0 0 -.2rem;
+	width: .4rem;
+	height: .4rem;
+	background: url(../imgs/timg.gif) no-repeat;
+	background-size: contain;
+}

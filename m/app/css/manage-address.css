@@ -1,0 +1,181 @@
+
+body{
+	background-color: #F0F0F0;
+}
+.wrap{
+	position: absolute;
+	top: .54rem;
+	left: 0;
+	bottom: .44rem;
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.no{
+	background: #fff url(../imgs/no-address.png) no-repeat;
+	background-position: 50% 0%;
+	background-size: 100%;
+}
+.list{}
+.list>li{
+	position: relative;
+	margin-top: .2rem;
+	padding: 0 .2rem;
+	padding-bottom: .08rem;
+	background-color: #fff;
+	box-shadow: 0 1px 1px 1px rgba(0,0,0,.1)
+}
+.list .people{
+	line-height: .54rem;
+	overflow: hidden;
+}
+.list .people>*{
+	color: #333;
+	font-size: .14rem;
+}
+.list .people>span{
+	float: left;
+}
+.list .people>em{
+	float: right;
+}
+.list>li>a{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: .8rem;
+}
+.list li>p{
+	margin-bottom: .2rem;
+	line-height: .16rem;
+	color: #333;
+	font-size: .14rem;
+}
+.list .btn-list{
+	overflow: hidden;
+}
+.list .btn-list>div{
+	float: left;
+}
+.list .btn-list>div>*{
+	float: left;
+	color: #333;
+}
+.list .btn-list>div>i{
+	margin-right: .08rem;
+	height: .16rem;
+}
+.list .btn-list>div>span{
+	line-height: .16rem;
+}
+.list .btn-list>.default{}
+.list .btn-list>.default>i{
+	width: .16rem;
+	background: url(../imgs/no-ok.png) no-repeat;
+	background-size: contain;
+}
+.list .btn-list>.default>i.active{
+	background: url(../imgs/ok.png) no-repeat;
+	background-size: contain;
+}
+.list .btn-list>.default>span{}
+.list .btn-list>.edit{
+	float: right;
+	margin-right: .3rem;
+}
+.list .btn-list>.edit>i{
+	width: .15rem;
+	background: url(../imgs/edit-icon.png) no-repeat;
+	background-size: contain;
+}
+.list .btn-list>.edit>span{}
+.list .btn-list>.delete{
+	float: right;
+}
+.list .btn-list>.delete>i{
+	width: .14rem;
+	background: url(../imgs/delete-icon.png) no-repeat;
+	background-size: contain;
+}
+.list .btn-list>.delete>span{}
+
+.add{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: .44rem;
+	line-height: .44rem;
+	text-align: center;
+	font-size: .14rem;
+	background-color: #CB68A4;
+}
+.add>a{
+	font-size: .14rem;
+}
+
+.opacity{
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: rgba(0,0,0,.4);
+	transition: all .5s;
+	display: none;
+	opacity: 0;
+}
+.opacity .con{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-top: -1.5rem;
+	margin-left: -1.35rem;
+	background-color: rgba(255,255,255,.95);
+	border-radius: 12px;
+	overflow: hidden;
+}
+.opacity .con .con-top{
+	width: 2.7rem;
+	height: 1.17rem;
+	background: url(../imgs/opacity-bg.png) no-repeat;
+	background-size: contain;
+}
+.opacity .con p{
+	text-align: center;
+	line-height: .4rem;
+	color: #222;
+}
+.opacity .con li{
+	float: left;
+	width: 50%;
+	line-height: .45rem;
+	text-align: center;
+	color: #0076FF;
+	border-top: 1px solid #D8D8D8;
+}
+.opacity .con li:last-of-type{
+	border-left: 1px solid #D8D8D8;
+}
+.opacity .con h2,.opacity .con input{
+	display: none;
+}
+.opacity .reason h2{
+	display: block;
+	font-size: .18rem;
+	color: #222;
+	text-align: center;
+	line-height: .4rem;
+}
+.opacity .reason input{
+	display: block;
+	margin-left: .2rem;
+	margin-bottom: .12rem;
+	width: 2.3rem;
+	height: .24rem;
+	color: #999;
+	text-indent: 2em;
+	background-color: #fff;
+	border-radius: 3px;
+}

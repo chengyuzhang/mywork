@@ -1,0 +1,404 @@
+.wrap{
+	position: absolute;
+	top: .54rem;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background: #fff;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.wrap img{
+	width: 100%;
+}
+.top{
+	position: relative;
+}
+.order-btn{
+	position: absolute;
+	top: 2.54rem;
+	left: .65rem;
+	width: 2.2rem;
+	height: .5rem;
+	z-index: 1;
+}
+
+.order-wrap{
+	position: fixed;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	background: rgba(255,255,255,.95);
+	opacity: 0;
+	display: none;
+	-webkit-transition: all .6s;
+	-moz-transition: all .6s;
+	transition: all .6s;
+	z-index: 1;
+}
+
+.order-top{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: .54rem;
+}
+.order-top>i{
+	float: left;
+	width: .2rem;
+	height: .2rem;
+	margin: .16rem 0 0 .16rem;
+	background: url(../imgs/x.png) no-repeat;
+	background-size: contain;
+}
+.order-con{
+	position: absolute;
+	left: 0;
+	top: .54rem;
+	bottom: .58rem;
+	width: 100%;
+	overflow: auto;
+}
+.order-con>ul{
+	padding: 0 .16rem;
+}
+.order-con>ul>li{
+	border-bottom: 1px solid #999;
+}
+.upload-photo{
+	width: 100%;
+	height: 1.22rem;
+	line-height: 1.22rem;
+	position: relative;
+}
+.upload-photo>*{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+.upload-photo>.upload-btn>*{
+	float: left;
+}
+.upload-photo>.upload-btn>img{
+	margin-top: .17rem;
+	width: .88rem;
+	height: .88rem;
+	border-radius: 4px;
+}
+.upload-photo>.upload-btn>p{
+	margin-left: .17rem;
+	font-size: .24rem;
+	color: #666;
+}
+.upload-photo>.upload-con>*{
+	float: left;
+	margin-top: .17rem;
+}
+.upload-photo>.upload-con>input{
+	width: .88rem;
+	height: .88rem;
+	opacity: 0;
+}
+.upload-photo>.upload-con>textarea{
+	resize:none;
+	margin-left: .2rem;
+	height: .88rem;
+	color: #999;
+	display: none;
+}
+::-webkit-input-placeholder{
+	color: #999;
+}
+::-moz-input-placeholder{
+	color: #999;
+}
+::input-placeholder{
+	color: #999;
+}
+/*选择款式*/
+.pub{
+	height: 1.24rem;
+}
+.spec{
+	height: 1.08rem;
+}
+.pub>h2{
+	font-size: .16rem;
+	height: .36rem;
+	line-height: .36rem;
+	color: #666;
+}
+.pub-con{
+	margin-top: .08rem;
+	height: .8rem;
+}
+.pub-con>div{
+	float: left;
+	width: 33.333%;
+	height: .8rem;
+	position: relative;
+}
+.size{
+	height: .64rem;
+}
+.size>div{
+	float: left;
+	width: 33.333%;
+	height: .64rem;
+	position: relative;
+}
+.pub-con>div>p{
+	position: absolute;
+	left: 0;
+	bottom: .08rem;
+	width: 100%;
+	font-size: .14rem;
+	color: #666;
+}
+
+
+.pub-con>div:nth-of-type(1){
+	text-align: left;
+}
+.pub-con>div:nth-of-type(2){
+	text-align: center;
+}
+.pub-con>div:nth-of-type(3){
+	text-align: right;
+}
+
+.pub p.active{
+	color: #CB68A4;
+}
+.style>div>p.lace:first-of-type{
+	width: .55rem;
+	text-align: center;
+}
+.style>div:nth-of-type(1)>p{
+	
+}
+.style>div:nth-of-type(2)>p{
+	text-align: center;
+}
+.style>div:nth-of-type(3)>p{
+	text-align: right;
+	padding-right: .08rem;
+}
+.style>div:nth-of-type(1)>img{
+	margin-left: .1rem;
+	width: .36rem;
+}
+.style>div:nth-of-type(2)>img{
+	width: .44rem;
+}
+.style>div:nth-of-type(3)>img{
+	margin-right: .1rem;
+	width: .22rem;
+}
+
+.material>div>img{
+	margin-left: .1rem;
+	width: .41rem;
+}
+.material>div:nth-of-type(1)>p{
+	padding-left: .1rem;
+}
+.material>div:nth-of-type(2)>p{
+}
+
+
+.size>div.small>img{
+	margin-left: .15rem;
+	width: .2rem;
+}
+.size>div.middle>img{
+	width: .24rem;
+}
+.size>div.large>img{
+	margin-right: .15rem;
+	width: .17rem;
+}
+.words{
+	width: 100%;
+	height: .56rem;
+}
+.words>input{
+	margin-top: .18rem;
+	width: 100%;
+	height: .2rem;
+	line-height: .16rem;
+	font-size: .16rem;
+	text-indent: .2rem;
+	color: #999;
+}
+.words>input[placeholder]{
+	line-height: .2rem;
+}
+/*底部价格*/
+.price{
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: .58rem;
+	line-height: .58rem;
+	z-index: 1;
+	border-top: 1px solid #F0F0F0;
+	background-color: #fff;
+}
+.price>*{
+	float: left;
+	overflow: hidden;
+}
+.price>span{
+	width: 1.7rem;
+	color: #E26AB4;
+	font-size: .18rem;
+	text-indent: .16rem;
+}
+.price>div{
+}
+.price>div>i{
+	margin-top: .07rem;
+	display: block;
+	width: .24rem;
+	height: .26rem;
+	background: url(../imgs/smile.png) no-repeat;
+	background-size: contain;
+}
+.price>div>a{
+	display: block;
+	margin-top: -.16rem;
+	color: #222;
+}
+.price>button{
+	float: right;
+	width: 1.4rem;
+	text-align: center;
+	font-size: .24rem;
+	background: #CB68A4;
+}
+
+/*选择款式弹层*/
+.opacity{
+	padding: 0 .1rem;
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	background: rgba(0,0,0,.4);
+	z-index: 1;
+	display: none;
+	opacity: 0;
+	-webkit-transition: all .5s;
+	-moz-transition: all .5s;
+	transition: all .5s;
+}
+/*.opacity-con{
+	margin-top: 2.1rem;
+	width: 100%;
+	background: #fff;
+	border-radius: 10px;
+	-webkit-transform: translate3d(0,-6rem,0);
+	-webkit-transition: all .5s;
+}*/
+.opacity-con{
+	margin-top: 1.5rem;
+	width: 100%;
+	background: #fff;
+	border-radius: 10px;
+}
+.opacity-con>h2{
+	line-height: .56rem;
+	height: .56rem;
+	font-size: .14rem;
+	text-align: center;
+	color: #8F8E94;
+}
+.opacity-con>ul{}
+.opacity-con>ul>li{
+	width: 100%;
+	height: .56rem;
+	line-height: .56rem;
+	text-align: center;
+	font-size: .2rem;
+	color: #666;
+	border-top: 1px solid #ddd;
+}
+.custom-service{
+	position: fixed;
+	top: 3.05rem;
+	right: .24rem;
+	width: .6rem;
+	height: .6rem;
+	background: url(../imgs/custom-service.png) no-repeat;
+	background-size: contain;
+}
+.protocol{
+	position: absolute;
+	left: 0;
+	top: 2.1rem;
+	width: 100%;
+	height: 1.3rem;
+}
+.protocol>p{
+	position: absolute;
+	bottom: .08rem;
+	width: 100%;
+	text-align: center;
+	overflow: hidden;
+}
+.protocol>p>*{
+
+}
+.protocol>p>span{
+	display: inline-block;
+	margin-right: .1rem;
+	transform: translateY(.01rem);
+	width: .12rem;
+	height: .12rem;
+	background: url(../imgs/ok.png) no-repeat;
+	background-size: contain;
+}
+.protocol>p>em{
+	color: #222;
+}
+.protocol>p>a{
+	color: #CB68A4;
+}
+.circle{
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	z-index: 3;
+	background: rgba(255,255,255,.8);
+	display: none;
+	opacity: 0;
+	transition: all .5s;
+}
+.circle>p{
+	position: absolute;
+	top: 50%;
+	margin-top: -.5rem;
+	left: 0;
+	width: 100%;
+	text-align: center;
+	color: #222;
+}
+.circle>span{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -.2rem 0 0 -.2rem;
+	width: .4rem;
+	height: .4rem;
+	background: url(../imgs/timg.gif) no-repeat;
+	background-size: contain;
+}

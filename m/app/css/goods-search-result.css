@@ -1,0 +1,248 @@
+body{
+	background-color: #fff;
+}
+.wrap{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	top: .54rem;
+	bottom: 0;
+	overflow-y: auto;
+}
+.tab-bar-wrap{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	background-color: #fff;
+	z-index: 1;
+}
+.tab-bar{
+	background-color: #fff;
+	border-bottom: 1px solid #eee;
+	overflow: hidden;
+}
+.tab-bar>li{
+	float: left;
+	width: 25%;
+	height: .4rem;
+	line-height: .4rem;
+	text-align: center;
+}
+.tab-bar>li>span{
+	float: left;
+	margin-left: .25rem;
+	font-size: .12rem;
+	color: #333;
+}
+.tab-bar>li:last-of-type>span{
+	margin-left: .05rem;
+}
+.tab-bar>li>em{
+	float: left;
+	margin-left: .05rem;
+	margin-top: .15rem;
+	width: .08rem;
+	height: .06rem;
+	background: url(../imgs/top-triangle.png) no-repeat;
+	background-size: contain;
+	transform: rotate(180deg);
+	transition: all .2s;
+}
+
+.tab-bar-con{
+	position: absolute;
+	left: 0;
+	top: .41rem;
+	width: 100%;
+	height: 0;
+	z-index: 1;
+	overflow: hidden;
+	transition: all .3s ease;
+}
+.tab-bar-con>ul{
+	padding: 0 .2rem;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.12);
+	background-color: #fff;
+}
+.tab-bar-con>ul>li{
+	height: .45rem;
+	line-height: .45rem;
+	border-bottom: 1px solid #eee;
+}
+.tab-bar-con>ul>li:last-of-type{
+	border-bottom: none;
+}
+.tab-bar-con>ul>li>*{
+	float: left;
+}
+.tab-bar-con>ul>li>span{
+	margin-left: .16rem;
+	font-size: .12rem;
+	color: #666;
+}
+.tab-bar-con>ul>li>i{
+	float: right;
+}
+.tab-bar-con>ul>li.active>span{
+	color: #CB68A4;
+}
+.tab-bar-con>ul>li.active>i{
+	margin-top: .15rem;
+	width: .15rem;
+	height: .15rem;
+	background: url(../imgs/color-ok.png) no-repeat;
+	background-size: contain;
+}
+
+.kind-gife-list{
+	margin-top: .18rem;
+	margin-left: .1rem;
+	padding-bottom: .05rem;
+	width: 2.55rem;
+	border-bottom: 1px solid #999;
+	overflow: hidden;
+}
+.kind-gife-list>li{
+	float: left;
+	width: .85rem;
+	text-align: center;
+}
+
+.kind-gife-list>li>img{
+	width: .6rem;
+	height: .6rem;
+}
+.kind-gife-list>li>p{
+	line-height: .36rem;
+	font-size: .12rem;
+	color: #020635;
+}
+
+.kind-public-list{
+	position: absolute;
+	left: 0;
+	top: .4rem;
+	bottom: 0;
+	width: 100%;
+	background-color: #fff;
+	overflow-y: auto;
+}
+.kind-public-list>li{
+	position: relative;
+	width: 100%;
+	height: 1.2rem;
+	border-top: 1px solid #f0f0f0;
+	overflow: hidden;
+}
+.kind-public-list>li>a{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+.kind-public-list>li>img{
+	float: left;
+	width: 1.2rem;
+	height: 1.2rem;
+	opacity: 0;
+	transition: all 1s;
+}
+.kind-public-list>li>div{
+	position: relative;
+	float: left;
+	width: 2.55rem;
+	height: 1.2rem;
+}
+.kind-public-list>li>div h3{
+	position: absolute;
+	top: .19rem;
+	left: .1rem;
+	width: 2.2rem;
+	font-size: .14rem;
+	color: #666;
+}
+.kind-public-list>li>div em{
+	position: absolute;
+	bottom: .3rem;
+	left: .1rem;
+	width: 2.2rem;
+	font-size: .18rem;
+	color: #E74566;
+}
+
+/*********首页弹窗**********/
+.opacity{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255,255,255,.9);
+	z-index: 2;
+	display: none;
+}
+.opacity>span.close{
+	position: absolute;
+	right: .1rem;
+	top: .1rem;
+	width: .4rem;
+	height: .4rem;
+	border: 1px solid #999;
+}
+.opacity>h3{
+	position: relative;
+	display: inline-block;
+	padding: 0 .3rem;
+	height: .4rem;
+	line-height: .4rem;
+	margin-left: .24rem;
+	text-align: center;
+	background-color: #fff;
+	border: 1px solid #f0f0f0;
+	border-radius: 8px;
+	overflow: hidden;
+}
+.opacity>h3:first-of-type{
+	margin-top: 1.2rem;
+}
+.opacity>h3>em{
+	position: absolute;
+	left: .05rem;
+	top: .05rem;
+	width: .3rem;
+	height: .3rem;
+	background: url(../imgs/heart.png) no-repeat;
+	background-size: contain;
+}
+.opacity>h3>i{
+	margin-left: .2rem;
+	font-size: .24rem;
+	color: #666;
+}
+.opacity>ul{
+	margin-top: .32rem;
+	margin-left: .24rem;
+	margin-bottom: .3rem;
+	overflow: hidden;
+}
+.opacity>ul>li{
+	float: left;
+	margin-bottom: .15rem;
+	margin-right: .2rem;
+	padding: 0 .26rem;
+	height: .34rem;
+	line-height: .34rem;
+	text-align: center;
+	font-size: .14rem;
+	color: #666;
+	background-color: #fff;
+	border: 1px solid #f0f0f0;
+	border-radius: 8px;
+	overflow: hidden;
+}
+.opacity>ul>li:nth-of-type(3n){
+	margin-right: 0;
+}

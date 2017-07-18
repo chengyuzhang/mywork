@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title> 个人中心-全部订单</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/swiper.min.3.css">
+</head>
+<body>
+    <header class="top-public">
+        <div class="top-wrap-public">
+            <img src="imgs/log.png" class="log">
+            <ul class="kinds-public">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="kind-gift.html">分类</a></li>
+                <li><a href="find-index.html">发现</a></li>
+            </ul>
+            <span class='func-public'>
+                <a href="search.html"><img src="imgs/search-pic.png"></a>
+                <a href="cart.html"><img src="imgs/cart.png"></a><em>1</em>
+                <a href="javascript:"><img src="imgs/personal.png"></a>
+            </span>
+        </div>
+    </header>
+    <div class="wrap-border-public"></div> 
+    <!--  banner -->
+
+    <div class="wrap-banner">
+        <img src="imgs/personal-orders-ban.png" alt="">
+        <div class="user-info">
+              <img src="imgs/user-log.png" class='user-log'>
+              <span>
+                  <b>戴永明</b>
+                  <em>13455456767</em>
+              </span>
+              <button class="quit-btn">退出</button>
+        </div>
+    </div>
+    <!-- main内容 -->
+    <div class="personal-orders-wrap">
+        <div class="wrap-orders">
+            <!-- 左边tab切换 -->
+            <div class="wrap-tab">
+                <ul>
+                    <li class="active nav-tab">我的订单</li>
+                    <li class="nav-tab">我的定制</li>
+                    <li class="nav-tab">个人信息</li>
+                    <li class="nav-tab">收货地址</li>
+                    <li class="nav-tab">品牌故事</li>
+                    <li><a target="_blank" href="jump.html">联系客服</a></li>
+                </ul>
+            </div>
+            <!-- 右边内容列表    全部订单我的订单-->
+            <div class="wrap-list nav-con">
+                <div class="wrap-list-nav">
+                    <ul>
+                        <li class="active">全部订单<em></em></li>
+                        <li>待付款<em></em></li>
+                        <li>待收货<em>(99)</em></li>
+                        <li>已完成<em>(90)</em></li>
+                        <li>已取消<em></em></li>
+                    </ul>
+                </div>
+                <div class="wrap-list-con">
+                              <!-- 待付款-已发货-待收货等 -->
+                              <div class="wrap-list-item">
+                                  <h4>等待付款</h4>
+                                  <dl>
+                                      <dt><img src="imgs/orders-item-pic.png"></dt>
+                                      <dd class="item-name" style="border-top:none">
+                                          <div>
+                                              <h5>品牌系列名称材质款式品牌系列名称</h5>
+                                              <em>备注：短斤少两倒计时倒计时</em>
+                                          </div>
+                                          <p>配件：<em>35cm</em></p>
+                                      </dd>  
+                                  </dl> 
+                                  <p class="pay-for">
+                                    <span>共<i>1</i>件商品</span><span>需付款：<i>¥800</i></span>
+                                    <a href="javascript:">去支付</a>
+                                  </p>
+                              </div>
+                              <!-- 去付款 -->
+                              <div class="wrap-list-item">
+                                  <h4>去付款</h4>
+                                  <dl>
+                                      <dt><img src="imgs/orders-item-pic.png"></dt>
+                                      <dd class="item-name" style="border-top:none">
+                                          <div>
+                                              <h5>品牌系列名称材质款式品牌系列名称</h5>
+                                              <em>备注：短斤少两倒计时倒计时</em>
+                                          </div>
+                                          <p>配件：<em>35cm</em></p>
+                                      </dd>
+                                  </dl>
+                                  <dl>
+                                      <dt><img src="imgs/orders-item-pic.png"></dt>
+                                      <dd class="item-name" style="border-top:none">
+                                          <div>
+                                              <h5>品牌系列名称材质款式品牌系列名称</h5>
+                                              <em>备注：短斤少两倒计时倒计时</em>
+                                          </div>
+                                          <p>配件：<em>35cm</em></p>
+                                      </dd>
+                                  </dl>
+                                  <dl>
+                                      <dt><img src="imgs/orders-item-pic.png"></dt>
+                                      <dd class="item-name" style="border-top:none">
+                                          <div>
+                                              <h5>品牌系列名称材质款式品牌系列名称</h5>
+                                              <em>备注：短斤少两倒计时倒计时</em>
+                                          </div>
+                                          <p>配件：<em>35cm</em></p>
+                                      </dd>
+                                  </dl>
+                                  <p class="pay-for">
+                                    <span>共<i>1</i>件商品</span><span>需付款：<i>¥800</i></span>
+                                    <a href="javascript:">去支付</a>
+                                  </p>
+                              </div>
+                                <!-- 已完成 -->
+                              <div class="wrap-list-item">
+                                  <h4>已完成</h4>
+                                  <dl>
+                                      <dt><img src="imgs/orders-item-pic.png"></dt>
+                                      <dd class="item-name" style="border-top:none">
+                                          <div>
+                                              <h5>品牌系列名称材质款式品牌系列名称</h5>
+                                              <em>备注：短斤少两倒计时倒计时</em>
+                                          </div>
+                                          <p>配件：<em>35cm</em></p>
+                                      </dd>
+                                  </dl> 
+                                  <p class="pay-for">
+                                      <span>共<i>1</i>件商品</span><span>需付款：<i>¥800</i></span>
+                                      <a href="javascript:">去支付</a>
+                                  </p>
+                              </div>
+                                <!-- 售后中 -->
+                              <div class="wrap-list-item">
+                                  <h4>已完成</h4>
+                                  <dl>
+                                      <dt><img src="imgs/orders-item-pic.png"></dt>
+                                      <dd class="item-name" style="border-top:none">
+                                          <div>
+                                              <h5>品牌系列名称材质款式品牌系列名称</h5>
+                                              <em>备注：短斤少两倒计时倒计时</em>
+                                          </div>
+                                          <p>配件：<em>35cm</em></p>
+                                      </dd>
+                                  </dl> 
+                                  <p class="pay-for">
+                                      <span>共<i>1</i>件商品</span><span>需付款：<i>¥800</i></span>
+                                      <a href="javascript:">去支付</a>
+                                  </p>
+                              </div>
+                </div>
+
+                
+            </div>
+              
+            <!-- 我的定制页 -->
+            <!-- 右边内容列表  -->
+            <div class="wrap-list-custom nav-con" style="display:none">
+                <div class="mycustom-wrap">
+                    <div class="wrap-mycustom" style="">
+                        <div class="custom-list-details">
+                            <p class="list-date"><em>2016-01-05</em> <i>16:24</i></p>
+                            <div class="list-table">
+                                <ul class="clear">
+                                    <li>宝贝</li>
+                                    <li>款式</li>
+                                    <li>材质</li>
+                                    <li>尺寸</li>
+                                    <li>刻字</li>
+                                </ul>
+                                <ol class="clear">
+                                    <li class="goods-list-pic"><img src="imgs/goods-list.png"></li>
+                                    <li>项链</li>
+                                    <li>纯银</li>
+                                    <li>3-4厘米</li>
+                                    <li>金色圆链</li>
+                                </ol>
+                                <p class="pay-for">支付金额：<em>¥800</em> <strong>已发货</strong> 
+                                <a href="javascript:">确认发货</a><a href="javascript:">联系客服</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wrap-mycustom" style="">
+                        <div class="custom-list-details">
+                            <p class="list-date"><em>2016-01-05</em> <i>16:24</i></p>
+                            <div class="list-table">
+                                <ul class="clear">
+                                    <li>宝贝</li>
+                                    <li>款式</li>
+                                    <li>材质</li>
+                                    <li>尺寸</li>
+                                    <li>刻字</li>
+                                </ul>
+                                <ol class="clear">
+                                    <li class="goods-list-pic"><img src="imgs/goods-list.png"></li>
+                                    <li>项链</li>
+                                    <li>纯银</li>
+                                    <li>3-4厘米</li>
+                                    <li>金色圆链</li>
+                                </ol>
+                                <p class="pay-for">支付金额：<em>¥800</em> <strong>已发货</strong> 
+                                <a href="javascript:">确认发货</a><a href="javascript:">联系客服</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wrap-mycustom" style="">
+                        <div class="custom-list-details">
+                            <p class="list-date"><em>2016-01-05</em> <i>16:24</i></p>
+                            <div class="list-table">
+                                <ul class="clear">
+                                    <li>宝贝</li>
+                                    <li>款式</li>
+                                    <li>材质</li>
+                                    <li>尺寸</li>
+                                    <li>刻字</li>
+                                </ul>
+                                <ol class="clear">
+                                    <li class="goods-list-pic"><img src="imgs/goods-list.png"></li>
+                                    <li>项链</li>
+                                    <li>纯银</li>
+                                    <li>3-4厘米</li>
+                                    <li>金色圆链</li>
+                                </ol>
+                                <p class="pay-for">支付金额：<em>¥800</em> <strong>已发货</strong> 
+                                <a href="javascript:">确认发货</a><a href="javascript:">联系客服</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- 个人信息页 -->
+            <div class="wrap-list-personal-info nav-con" style="display:none">
+                <!--   编辑按钮  定位 -->
+                <div class="edit">
+                    <img src="imgs/edit-btn.png">
+                    <a href="javascript:" class="edit-btn">编辑</a>
+                </div>  
+                <p id="head"><span style="font-size:16px;">头像</span> <em><img class="head-pic edit-img" src="imgs/head-pic.png"></em></p>
+                <p class="style"><span>昵称</span><em class="edit-name">戴永明</em></p>
+                <p class="style"><span>性别</span><em class="edit-sex">男</em></p>
+                <p class="style"><span>已绑定手机号</span><em class="edit-tel">13516317312</em> </p>
+            </div>
+            
+            <!-- 收货地址页 -->
+            <div class="wrap-list-address nav-con" style="display: none">
+                <table class="table-address">
+                    <tr style="height:35px;line-height:35px;">
+                        <th>收件人</th>
+                        <th>详细地址</th>
+                        <th>电话</th>
+                        <th>操作</th>
+                        <th></th>
+                    </tr>  
+                    <tr class="table-list">
+                        <td class="add-name">戴永明</td>
+                        <td class="add-address">详细地址：北京市西城区西单大街176号汉光百货1层l Do专柜</td>
+                        <td class="add-tel">13447376361</td>
+                        <td class="add-operate"><a href="javascript:">编辑</a> <i></i> <a href="javascript:">删除</a></td>
+                        <td class="add-default"><span class="checkbox"></span><em>默认地址</em></td>
+                    </tr>
+                    <tr class="table-list">
+                        <td class="add-name">戴永明</td>
+                        <td class="add-address">详细地址：北京市西城区西单大街176号汉光百货1层l Do专柜</td>
+                        <td class="add-tel">13447376361</td>
+                        <td class="add-operate clear"><a href="javascript:">编辑</a> <i></i> <a href="javascript:">删除</a></td>
+                        <td class="add-default clear"><span class="checkbox "></span><em>默认地址</em></td>
+                    </tr>
+                </table>
+               
+                <!-- 新增收货地址  -->
+                <div class="add-new-address add">
+                    <ul>
+                        <li class="clear">
+                            <span style="color:#FF66AA">新增收获地址</span>
+                        </li>
+                        <li>
+                            <span>收货人</span>
+                            <input type="text" name="" class="geter">
+                        </li>
+                        <li>
+                            <span>收货人手机</span>
+                            <input type="text" name="" class="geter-tel">
+                        </li>
+                        <li>
+                            <span>所在地区</span>
+                            <p class="geter-zone"><i>请选择省市</i><b></b></p>
+                        </li>
+                        <li>
+                            <span>详细地址 <br/><em>街道、楼牌号等</em></span>
+                            <textarea class="geter-zone-local"></textarea>
+                        </li>
+                        <li>
+                            <button class="keep">保存</button>
+                        </li>
+                    </ul>
+                    <div class="select">
+                        <div class="select-top">
+                            <span class="close"></span>
+                            <h2>选择地区</h2>
+                        </div>
+                        <div class="select-wrap">
+                            <div class="province">
+                                <ul>
+                                    <!-- <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li> -->
+                                </ul>
+                            </div>
+                            <div class="city">
+                                <ul>
+                                    <!-- <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 编辑收货地址  -->
+                <div class="add-new-address edit1">
+                    <ul>
+                        <li class="clear">
+                            <span style="color:#FF66AA">编辑收获地址</span>
+                        </li>
+                        <li>
+                            <span>收货人</span>
+                            <input type="text" name="" class="geter">
+                        </li>
+                        <li>
+                            <span>收货人手机</span>
+                            <input type="text" name="" class="geter-tel">
+                        </li>
+                        <li>
+                            <span>所在地区</span>
+                            <p class="geter-zone"><i>请选择省市</i><b></b></p>
+                        </li>
+                        <li>
+                            <span>详细地址 <br/><em>街道、楼牌号等</em></span>
+                            <textarea class="geter-zone-local"></textarea>
+                        </li>
+                        <li>
+                            <button class="keep">保存</button>
+                        </li>
+                    </ul>
+                    <div class="select">
+                        <div class="select-top">
+                            <span class="close"></span>
+                            <h2>选择地区</h2>
+                        </div>
+                        <div class="select-wrap">
+                            <div class="province">
+                                <ul>
+                                    <!-- <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li> -->
+                                </ul>
+                            </div>
+                            <div class="city">
+                                <ul>
+                                    <!-- <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li>
+                                    <li>a</li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           
+            <div class="wrap-brand-story nav-con" style="display: none">
+              <div class="pic1"><img src="imgs/brand-story-pic1.png"></div>
+              <div class="border-bottom"></div>
+              <div class="text1">
+                <h3><strong style="font-size:36px;">爱，</strong>是给未来的礼物</h3>
+                <p>从妈妈怀孕到孩子10岁这段时间被称为父母与孩子的“黄金10年”。在这其间，有无数个美好瞬间值得父母与孩子共同纪念。ooh Dear亲子礼品珠宝品牌拥有专业的设计师与制作团队，将深刻寓意融入珠宝之中，铭记宝宝成长过程中每一分独一无二的“初爱”记忆。</p>
+              </div>
+              <div class="pic2"><img src="imgs/brand-story-pic2.png"></div>
+              <div class="text2">
+                <h3><strong style="font-size:36px;">致爱.</strong>是给未来的礼物</h3>
+                <p>“绘梦童画”定制系列，让宝宝的画作也能变成一件充满意义的首饰。将画作上传于我们，专业的设计师与匠师将为您打造出一份专属首饰。</p>
+              </div>
+              <div class="pic3"><img src="imgs/brand-story-pic3.png"></div>
+              <div class="pic4"><img src="imgs/brand-story-pic4.png"><a href="personal-process.html"></a></div>
+            </div>
+        </div>
+        <!--分页器-->
+        <div class="paging init <!-- second third fourth middle last-4 last-3 last-2 last-1 --> " style="margin-left: 170px; display: none">
+            <!-- <span class="to-prev"></span>
+            <ul class="page-wrap">
+              <li class="active">1</li>
+              <li>1</li>
+              <li class="dot">...</li>
+              <li>1</li>
+              <li>1</li>
+              <li>1</li>
+            </ul>
+            <span class="to-next"></span> -->
+        </div>
+    </div>
+    <div class="footer">
+        <div class="wrap-border-public"></div>  
+        <div class="footer-content">
+            <div class="left"> 
+                <img src="imgs/log.png" class="log">
+            </div>
+            <div class="center">
+                <p>ooh Dear 北京华亨特经贸有限责任公司 北京朝阳区八里庄东里1号莱锦产业园</p>
+                <p>2009-2017  oohdear.com ALL Rights Reserved  京ICP备08100402号 京ICP证120164</p>
+            </div>
+            <div class="right">
+                <p>客服电话：<i>400-815-8898</i><i>010-58792103</i>工作日 9:00-18:00</p>
+                <p>在线客服：每日9:00-22:00</p>
+            </div>
+        </div>
+    </div>  
+    <!-- 登陆页弹出层 -->
+    <div class="opacity">
+        <div class="user">
+            <h3>免注册登录</h3>
+            <ul class="login">
+                <li>
+                    <i></i>
+                    <input class="sign" type="text" name="" value="" placeholder="请输入数字验证">
+                    <img src="./imgs/order-7.png" alt="">
+                </li>
+                <li>
+                    <i></i>
+                    <input class="tel" type="tel" name="" value="" placeholder="请填写手机号">
+                    <button type="button">获取验证码</button>
+                </li>
+                <li>
+                    <i></i>
+                    <input class="code" type="text" value="" name="" placeholder="请填输入验证码">
+                </li>
+            </ul>
+            <button class="login-btn" type="button">登录</button>
+            <p class="argee">登录即同意<a href="protocol.html">《用户协议》</a></p>
+        </div>
+    </div> 
+
+    <div class="opacity1">
+        <div class="con ">
+            <div class="con-top"></div>
+            <h2>title</h2>
+            <p>是否确认删除地址？</p>
+            <!-- <input type="text" name="" placeholder="请输入理由"> -->
+            <ul>
+                <li>取消</li>
+                <li>确认</li>
+            </ul>
+        </div>
+    </div>
+    <!-- 编辑用户信息 -->
+    <div class="opacity2" >
+        <div class="wrap-list-personal-info2 nav-con2">
+            <!--   编辑按钮  定位 -->
+            <ul>
+              <li id="header">
+                  <span style="font-size:16px;">当前头像</span> 
+                  <em><img class="head-pic edit-img1" src="imgs/head-pic.png"></em> 
+                  <a href="javascript:" class="edit-head-btn">编辑头像</a>
+                  <input class="upload" type="file" name="photo" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
+              </li>
+              <li class="style"><span>昵称</span><input class="edit-name1"></li>
+              <li class="style"><span>已绑定手机号</span><input class="edit-tel1" readonly="readonly" style="color: #999;"></li>
+              <li class="style sex-item1"><span>性别</span><i><b>男</b><em></em></i>
+                <ul class="sex">
+                  <li>男</li>
+                  <li>女</li>
+                </ul>
+              </li>
+            </ul>
+            <button class="save">保存</button>
+        </div>
+    </div> 
+     <!-- 资料保存中 -->
+    <div class="circle">
+        <p>保存资料中,请耐心等待</p>
+        <span></span>
+    </div>
+    <div class="opacity3">
+        <div class="con cancel">
+            <div class="con-top"></div>
+            <h2>申请退款</h2>
+            <p>申请退款请在输入框中填写退款理由</p>
+            <a href="jump.html">联系客服</a>
+            <input type="text" name="" placeholder="请输入理由">
+            <ul>
+                <li>取消</li>
+                <li>确认</li>
+            </ul>
+        </div>
+    </div>
+<script src="./js/jquery.min.js"></script>        
+<script src="./js/swiper.min.3.js"></script>
+<script type="text/javascript" src="./js/ap.js"></script>
+
+</body>
+</html>

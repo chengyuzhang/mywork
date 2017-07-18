@@ -1,0 +1,368 @@
+body{
+	background-color: #f0f0f0;
+}
+.wrap{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	top: .54rem;
+	bottom: 0;
+	overflow-y: auto;
+}
+.topic-pic{
+	position: relative;
+	width: 100%;
+	height: 1rem;
+}
+.topic-pic>img{
+	width: 100%;
+	height: 100%;
+}
+.topic-pic>a{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+}
+
+.kind-public{
+	margin-top: .19rem;
+	margin-bottom: .19rem;
+}
+.kind-public>.kind-gife-public{
+	margin-left: .13rem;
+	width: 3.5rem;
+	height: .38rem;
+	background-color: #fff;
+	border-radius: 5px;
+	overflow: hidden;
+}
+.kind-public>.kind-gife-public>span{
+	float: left;
+	margin-top: .04rem;
+	margin-left: .05rem;
+	margin-bottom: .05rem;
+	margin-right: .1rem;
+	width: .3rem;
+	height: .3rem;
+	background: url(../imgs/for-who.png) no-repeat;
+	background-size: contain; 
+}
+.kind-public>.kind-gife-public:last-of-type>span{
+	background: url(../imgs/for-what.png) no-repeat;
+	background-size: contain; 
+}
+.kind-public>.kind-gife-public>p{
+	float: left;
+	font-size: .14rem;
+	color: #999;
+	line-height: .38rem;
+}
+.kind-public .for-who{
+	margin-top: .14rem;
+}
+.kind-public .for-who span{}
+.kind-public .for-who p{}
+.kind-public .for-what{
+	margin-top: .1rem;
+}
+.kind-public .for-what span{}
+.kind-public .for-what p{}
+
+.tab-bar-wrap{
+	position: relative;
+}
+.tab-bar{
+	background-color: #fff;
+	overflow: hidden;
+}
+.tab-bar>li{
+	float: left;
+	width: 25%;
+	height: .4rem;
+	line-height: .4rem;
+	text-align: center;
+}
+.tab-bar>li>span{
+	float: left;
+	margin-left: .25rem;
+	max-width: .5rem;
+	font-size: .12rem;
+	color: #333;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.tab-bar>li>span>i{
+	display: inline-block;
+	position: relative;
+	margin-right: .1rem;
+	top: .02rem;
+	left: .02rem;
+	width: .03rem;
+	height: .12rem;
+}
+.tab-bar>li:last-of-type>span{
+	margin-left: .05rem;
+}
+.tab-bar>li>em{
+	float: left;
+	margin-left: .05rem;
+	margin-top: .15rem;
+	width: .08rem;
+	height: .06rem;
+	background: url(../imgs/top-triangle.png) no-repeat;
+	background-size: contain;
+	transform: rotate(180deg);
+	transition: all .2s;
+}
+
+.tab-bar-con{
+	position: absolute;
+	left: 0;
+	top: .41rem;
+	width: 100%;
+	height: 0;
+	z-index: 1;
+	overflow: hidden;
+	transition: all .3s ease;
+}
+.tab-bar-con>ul{
+	padding: 0 .2rem;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.12);
+	background-color: #fff;
+}
+.tab-bar-con>ul>li{
+	height: .45rem;
+	line-height: .45rem;
+	border-bottom: 1px solid #eee;
+}
+.tab-bar-con>ul>li:last-of-type{
+	border-bottom: none;
+}
+.tab-bar-con>ul>li>*{
+	float: left;
+}
+.tab-bar-con>ul>li>span{
+	margin-left: .16rem;
+	font-size: .12rem;
+	color: #666;
+}
+.tab-bar-con>ul>li>span>em{
+	display: inline-block;
+	position: relative;
+	top: .02rem;
+	left: .05rem;
+	width: .03rem;
+	height: .12rem;
+}
+.tab-bar-con>ul>li>i{
+	float: right;
+}
+.tab-bar-con>ul>li.active>span{
+	color: #CB68A4;
+}
+.tab-bar-con>ul>li.active>i{
+	margin-top: .15rem;
+	width: .15rem;
+	height: .15rem;
+	background: url(../imgs/color-ok.png) no-repeat;
+	background-size: contain;
+}
+/*.kind-gife-list{
+	margin-top: .18rem;
+	margin-left: .1rem;
+	padding-bottom: .05rem;
+	width: 2.55rem;
+	border-bottom: 1px solid #999;
+	overflow: hidden;
+}
+.kind-gife-list>li{
+	float: left;
+	width: .85rem;
+	text-align: center;
+}
+
+.kind-gife-list>li>img{
+	width: .6rem;
+	height: .6rem;
+}
+.kind-gife-list>li>p{
+	line-height: .36rem;
+	font-size: .12rem;
+	color: #020635;
+}*/
+
+.kind-public-list{
+	background-color: #fff;
+}
+.kind-public-list>li{
+	position: relative;
+	width: 100%;
+	height: 1.2rem;
+	border-top: 1px solid #f0f0f0;
+	overflow: hidden;
+}
+.kind-public-list>li>a{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+.kind-public-list>li>img{
+	float: left;
+	width: 1.2rem;
+	height: 1.2rem;
+	opacity: 0;
+	transition: all 1s;
+}
+.kind-public-list>li>div{
+	position: relative;
+	float: left;
+	width: 2.55rem;
+	height: 1.2rem;
+}
+.kind-public-list>li>div h3{
+	position: absolute;
+	top: .19rem;
+	left: .1rem;
+	width: 2.2rem;
+	line-height: .16rem;
+	font-size: .14rem;
+	color: #666;
+}
+.kind-public-list>li>div em{
+	position: absolute;
+	bottom: .3rem;
+	left: .1rem;
+	width: 2.2rem;
+	font-size: .18rem;
+	color: #E74566;
+}
+
+.goods-gife-list1{
+	display: none;
+}
+/*********首页弹窗**********/
+.opacity{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255,255,255,1);
+	z-index: 2;
+	display: none;
+	opacity: 0;
+	transition: all .5s;
+}
+.opacity>span.close{
+	position: absolute;
+	left: .15rem;
+	top: .15rem;
+	width: .24rem;
+	height: .24rem;
+	background: url(../imgs/x-icon.png) no-repeat;
+	background-size: contain;
+}
+.opacity>h3{
+	position: relative;
+	display: inline-block;
+	height: .4rem;
+	line-height: .4rem;
+	margin-left: .34rem;
+	text-align: center;
+	border-radius: 8px;
+	overflow: hidden;
+}
+.opacity>h3:first-of-type{
+	margin-top: 1.2rem;
+}
+.opacity>h3>em{
+	float: left;
+	margin-top: .05rem;
+	width: .3rem;
+	height: .3rem;
+	background: url(../imgs/for-who.png) no-repeat;
+	background-size: contain;
+}
+.opacity>h3>em.for-what{
+	background: url(../imgs/for-what.png) no-repeat;
+	background-size: contain;
+}
+.opacity>h3>i{
+	float: left;
+	margin-left: .07rem;
+	font-size: .24rem;
+	color: #666;
+}
+.opacity>ul{
+	margin-top: .32rem;
+	margin-left: .24rem;
+	margin-bottom: .3rem;
+	overflow: hidden;
+}
+.opacity>ul>li{
+	float: left;
+	position: relative;
+	margin-bottom: .15rem;
+	margin-right: .2rem;
+	padding: 0 .19rem;
+	min-width: .96rem;
+	height: .34rem;
+	line-height: .34rem;
+	text-align: center;
+	font-size: .14rem;
+	color: #666;
+	background-color: #fff;
+	border: 1px solid #f0f0f0;
+	border-radius: 4px;
+	overflow: hidden;
+}
+.opacity>ul>li.active{
+	color: #E26AB4;
+	border: 1px solid #E26AB4;
+}
+.opacity>ul>li.active>i{
+	position: absolute;
+	right: -.03rem;
+	bottom: -.01rem;
+	width: .19rem;
+	height: .19rem;
+	background: url(../imgs/corner.png) no-repeat;
+	background-size: contain;
+}
+.opacity>ul>li:nth-of-type(3n){
+	margin-right: 0;
+}
+.opacity .btn{
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: .48rem;
+	line-height: .48rem;
+	text-align: center;
+	font-size: .18rem;
+	color: #fff;
+	background-color: #F5A5C7;
+}
+
+
+.refresh{
+	position: fixed;
+	bottom: -1rem;
+	left: 0;
+	width: 100%;
+	height: .4rem;
+	line-height: .4rem;
+	text-align: center;
+	color: #fff;
+	background-color: rgba(0,0,0,.5);
+	transition: all .5s;
+	z-index: 2;
+}
